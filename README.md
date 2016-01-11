@@ -35,12 +35,13 @@ Before we start, you need to install some prerequisites:
 
 #### 7) Go to [Github.com](http://www.github.com) and create a repository called `YOUR_USERNAME.github.io` (in my case it was [paladini.github.io](http://paladini.github.io)). 
 
-#### 8) Open another Terminal window and go to Ghost folder (in my case: `/home/paladini/ghost`). Run the following commands:
+#### 8) Download [this script](https://github.com/paladini/ghost-for-github-pages/blob/master/update_website.sh) and [this HTML page]() and put it inside Ghost folder. Open a terminal window, go the Ghost folder and run `chmod +x update_website.sh`.
+
+#### 9) Open another Terminal window and go to Ghost folder (in my case: `/home/paladini/ghost`). Run the following commands:
 
 ```sh
 buster setup
 buster generate
-ln static/index.html index.html
 git init
 git remote add origin git@github.com:YOUR_USERNAME/YOUR_USERNAME.github.io.git
 git add -A
@@ -48,12 +49,13 @@ git commit -m "Firs commit"
 git push origin master -f
 ```
 
-#### 9) Download [this script](https://gist.githubusercontent.com/paladini/8872c346c514b513dbfd/raw/b06dcf6705ee59fd6045945de87201ce6ce02faa/update_website.sh) and put it inside Ghost folder. Open a terminal window, go the Ghost folder and run `chmod +x update_website.sh`.
+#### 10) After about 10 minutes (according to Github Pages), your website will be live at [http://YOUR_USERNAME.github.io](http://YOUR_USERNAME.github.io). In my case, this is my page:
+![](tutorial_images/ghost-at-github-pages-7.png)
 
 ## Updating the website [creating new posts, changing theme, etc.]
 Whenever you want to create a new post, change the theme of the site (etc.), you should run `npm start` inside the Ghost folder to start the server at the localhost. Then you can go to [http://localhost:2368/ghost/](http://localhost:2368/ghost/) and do whatever you want to.
 
-To send the changes to your page, just run `./update_website.sh` from the Terminal. According to Github Pages, your changes will take effect after ~10 minutes. You can check your online page at [http://YOUR_USERNAME.github.io](http://YOUR_USERNAME.github.io).
+To send the changes to your page, just run `./update_website.sh` from the Terminal. Remember that Github takes about 10 minutes to update the website.
 
 ## About
 This readme was created in less than one hour, so if it have any problems or you has some question in some topic, please contact me at fernandopalad at gmail dot com. Feel free to improve it or make any critics.
