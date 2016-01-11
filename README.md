@@ -8,6 +8,8 @@ In order to create your own Ghost blog for free and host it at Github pages, che
 
 **Example of working project:** https://github.com/paladini/paladini.github.io
 
+**Note that the first time installation take some time (about 10 minutes), but after that you just need to run `npm start` to use Ghost at your computer (creating posts, modifying the website, etc.) and `./update_website.sh` to send the changes to your website. Simple as that.**
+
 ## Prerequisites
 Before we start, you need to install some prerequisites:
 - *[pip](https://pip.pypa.io/en/stable/quickstart/)*, the Python package manager. Python 2.7.9 and later comes with *pip* by default, so it won't will bother you.
@@ -28,14 +30,16 @@ Before we start, you need to install some prerequisites:
 ![Run the Ghost server at localhost for the first time using "npm start"](http://i.imgur.com/m49izT3.png)
 
 #### 5) Ghost now will be live at [http://localhost:2368](http://localhost:2368). Let's create your user and configure Ghost for the first time: go to [http://localhost:2368/ghost](http://localhost:2368/ghost) and follow the instructions.
-![](http://i.imgur.com/lss8Rbw.png)
+![Follow the Ghost instructions for the first time install.](http://i.imgur.com/lss8Rbw.png)
 
-#### 6) Now you are at the Ghost Administration Panel, personalize your page and create the desired content.
-![](http://i.imgur.com/lXhbMJK.png)
+#### 6) Now you are at the Ghost Administrative Panel, personalize your page and create the desired content.
+![Ghost Administrative Panel](http://i.imgur.com/lXhbMJK.png)
 
 #### 7) Go to [Github.com](http://www.github.com) and create a repository called `YOUR_USERNAME.github.io` (in my case it was [paladini.github.io](http://paladini.github.io)). 
+![Create a repository called "YOUR_USERNAME.github.io".](tutorial_images/ghost-at-github-create-repository.png)
 
 #### 8) Download [this script](https://github.com/paladini/ghost-for-github-pages/blob/master/update_website.sh) and [this HTML page](https://github.com/paladini/ghost-for-github-pages/blob/master/index.html) and put it inside Ghost folder. Open a terminal window, go the Ghost folder and run `chmod +x update_website.sh`.
+![](tutorial_images/ghost-at-github-pages-for-free-index-script.png)
 
 #### 9) Open another Terminal window and go to Ghost folder (in my case: `/home/paladini/ghost`). Run the following commands:
 
