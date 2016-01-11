@@ -35,7 +35,7 @@ Before we start, you need to install some prerequisites:
 
 #### 7) Go to [Github.com](http://www.github.com) and create a repository called `YOUR_USERNAME.github.io` (in my case it was [paladini.github.io](http://paladini.github.io)). 
 
-#### 8) Download [this script](https://github.com/paladini/ghost-for-github-pages/blob/master/update_website.sh) and [this HTML page]() and put it inside Ghost folder. Open a terminal window, go the Ghost folder and run `chmod +x update_website.sh`.
+#### 8) Download [this script](https://github.com/paladini/ghost-for-github-pages/blob/master/update_website.sh) and [this HTML page](https://github.com/paladini/ghost-for-github-pages/blob/master/index.html) and put it inside Ghost folder. Open a terminal window, go the Ghost folder and run `chmod +x update_website.sh`.
 
 #### 9) Open another Terminal window and go to Ghost folder (in my case: `/home/paladini/ghost`). Run the following commands:
 
