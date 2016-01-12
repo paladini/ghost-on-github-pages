@@ -1,4 +1,4 @@
-# Ghost for Github Pages
+# Ghost on Github Pages
 ![Ghost is an awesome open-source blogging plataform. Now you can host it for free at Github Pages.](http://i.imgur.com/3ACSCiW.jpg)
 ![Ghost is an awesome open-source blogging plataform. Now you can host it for free at Github Pages.](https://cloud.githubusercontent.com/assets/120485/6626501/b2bb072c-c8ff-11e4-8e1a-2e78e68fd5c3.png)
 
