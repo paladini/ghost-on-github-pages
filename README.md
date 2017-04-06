@@ -4,17 +4,16 @@
 
 [Ghost](https://github.com/tryghost/Ghost) is a simple, powerful publishing platform that allows you to share your stories with the world. It usually needs a paid host, but there's some ways to host your Ghost installation at Github Pages, for free. 
 
-In order to create your own Ghost blog for free and host it at Github pages, check the following instructions. These instructions were tested within Linux, if you know how to make it work for Windows or Mac OS, please let me know and I'll add the instructions here.
+In order to create your own Ghost blog for free and host it at Github pages, check the following instructions. These instructions were tested within Linux, if you know how to make it work for Windows or Mac OS, please let me know and I'll add the instructions here. [**Check out the Live Demo**](https://github.com/paladini/paladini.github.io).
 
-**Example of working project:** https://github.com/paladini/paladini.github.io
-
-**Note that the first time installation take some time (about 10 minutes), but after that you just need to run `npm start` to use Ghost at your computer (creating posts, modifying the website, etc.) and `./update_website.sh` to send the changes to your website. Simple as that.**
+**Note:** that the first time installation take some time (about 10 minutes), but after that you just need to run `npm start` to use Ghost at your computer (creating posts, modifying the website, etc.) and `./update_website.sh` to send the changes to your website. Simple as that.
 
 ## Prerequisites
 Before we start, you need to install some prerequisites:
-- *[pip](https://pip.pypa.io/en/stable/quickstart/)*, the Python package manager. Python 2.7.9 and later comes with *pip* by default, so it won't will bother you.
-- *[buster](https://pypi.python.org/pypi/buster/0.1.3)*, a Python package. To install buster, open the Terminal and run `pip install buster`.
-- *[npm](https://nodejs.org/en/)*, the NodeJS package manager. Download NodeJS and install it. NPM is part of NodeJS. 
+- [**pip**](https://pip.pypa.io/en/stable/quickstart/): Python 2.7.9 and later comes with *pip* by default, so it won't will bother you.
+- [**buster**](https://pypi.python.org/pypi/buster/0.1.3): a Python package.
+- [**NodeJS**](https://nodejs.org/en/): make sure that your [NodeJS version is officially supported by latest Ghost release](http://support.ghost.org/supported-node-versions/).
+- [**npm**](https://nodejs.org/en/): NodeJS package manager.
 
 ## Installing for the first time
 #### 1) Download the latest version of Ghost at [Ghost download page](https://ghost.org/download/).
