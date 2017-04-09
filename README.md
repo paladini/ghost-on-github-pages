@@ -48,7 +48,7 @@ buster generate
 git init
 git remote add origin git@github.com:YOUR_USERNAME/YOUR_USERNAME.github.io.git
 git add -A
-git commit -m "Firs commit"
+git commit -m "First commit"
 git push origin master -f
 ```
 
