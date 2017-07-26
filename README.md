@@ -16,7 +16,7 @@ Before we start, you need to install some prerequisites:
 - [**npm**](https://nodejs.org/en/): NodeJS package manager.
 
 ## Installing for the first time
-#### 1) Download the latest version of Ghost at [Ghost download page](https://ghost.org/download/).
+#### 1) Download the latest version of Ghost at [Ghost download page](https://ghost.org/developers/).
 ![Download the latest version of Ghost](http://i.imgur.com/eO6a2UR.png)
 
 #### 2) Extract it somewhere you'll remember. In my example, at `/home/paladini/ghost`.
