@@ -14,6 +14,7 @@ Before we start, you need to install some prerequisites:
 - [**buster**](https://pypi.python.org/pypi/buster/0.1.3): a Python package.
 - [**NodeJS**](https://nodejs.org/en/): make sure that your [NodeJS version is officially supported by latest Ghost release](http://support.ghost.org/supported-node-versions/).
 - [**npm**](https://nodejs.org/en/): NodeJS package manager.
+- [**knex-migrator**](https://github.com/TryGhost/knex-migrator): you will also need to run `knex-migrator init`
 
 ## Installing for the first time
 #### 1) Download the latest version of Ghost at [Ghost download page](https://ghost.org/developers/).
