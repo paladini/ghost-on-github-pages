@@ -1,12 +1,16 @@
 # Ghost on Github Pages
-![Ghost is an awesome open-source blogging plataform. Now you can host it for free at Github Pages.](http://i.imgur.com/3ACSCiW.jpg)
-![Ghost is an awesome open-source blogging plataform. Now you can host it for free at Github Pages.](https://cloud.githubusercontent.com/assets/120485/6626501/b2bb072c-c8ff-11e4-8e1a-2e78e68fd5c3.png)
 
-[Ghost](https://github.com/tryghost/Ghost) is a simple, powerful publishing platform that allows you to share your stories with the world. It usually needs a paid host, but there's some ways to host your Ghost installation at Github Pages, for free.
+![image](https://user-images.githubusercontent.com/3361224/39667855-7f37e624-5095-11e8-9297-6a2e63aaac4b.png)
 
-In order to create your own Ghost blog for free and host it at Github pages, check the following instructions. These instructions were tested within Linux, if you know how to make it work for Windows or Mac OS, please let me know and I'll add the instructions here. [**Check out the Live Demo**](https://github.com/paladini/paladini.github.io).
+[Ghost](https://github.com/tryghost/Ghost) is a fully open source, adaptable platform for building and running a modern online publication - a complete professional publishing platform. **And now you can use this incredible platform for absolutely no cost.**
 
-**Note:** that the first time installation take some time (about 10 minutes), but after that you just need to run `npm start` to use Ghost at your computer (creating posts, modifying the website, etc.) and `./update_website.sh` to send the changes to your website. Simple as that.
+### Are you kidding?
+No, I'm not. You can build your own Ghost blog for free in a few minutes. How you can do that? Just read this guide that compiles everything you need to know to setup and maintain your Ghost by your own, with no cost associated. 
+
+### How it's possible?
+Through some powerful automation scripts allied to Github Pages, a service that allows you to publish static sites for free. In about 20 minutes you will have a Ghost blog available to the world, with a custom design and with everything you feel comfortable to write on Internet. After that initial setup, it's very easy to maintain a fresh and modern blog.
+
+[<h3>Check the live demo here</h3>](http://paladini.github.io/ghost-on-github-pages-demo/)
 
 ## Requirements
 
@@ -28,10 +32,12 @@ There's some other dependencies that should be installed in order to this script
 - buster, a Python package responsible for generating the static content from the Ghost server.
 - knex-migrator, a Node package that serves as a database migration tool.
 
-## Installing for the first time
-#### 1) Download the latest version of Ghost at [Ghost download page](https://ghost.org/developers/).
-![Download the latest version of Ghost](http://i.imgur.com/eO6a2UR.png)
+## Setup
 
+**1) Download [the latest version from `ghost-on-github-pages` repository](https://github.com/paladini/ghost-on-github-pages/archive/master.zip).**
+![image](https://user-images.githubusercontent.com/3361224/39668046-c66d1c90-5099-11e8-81d3-f8dd34527c58.png)
+
+**2) Extract it anywhere. E.g: I've extract this file to `
 #### 2) Extract it somewhere you'll remember. In my example, at `/home/paladini/ghost`.
 ![Extract the Ghost folder somewhere you'll remember](http://i.imgur.com/wFx9uEu.png)
 
