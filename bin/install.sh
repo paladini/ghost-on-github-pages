@@ -2,6 +2,16 @@
 GHOST_ZIP=includes/latest_ghost_release.zip
 HOME_PATH=$HOME
 GHOST_PATH="${HOME_PATH}/.ghost/"
+RELATIVE_PATH=$(dirname "$0")
+# CURRENT_PATH=$(dirname "$0")
+# CURRENT_SCRIPT_PATH=$(readlink -f "$0")
+
+if [ "$(uname -s)" = 'Linux' ]; then
+	CURRENT_SCRIPT_PATH=$(readlink -f "$0")
+else
+	CURRENT_SCRIPT_PATH=$(readlink "$0")
+fi
+CURRENT_FOLDER_PATH=$(dirname "$CURRENT_SCRIPT_PATH")
 
 check_ghost_folder() {
 	if [ ! -d "includes/ghost" ]; then
@@ -162,4 +172,10 @@ local_run() {
 local_setup
 local_deps
 local_run
+# cd "$(pwd)"
+# # cd "$(dirname $0)"
+# echo "$(pwd)"
+# # $(PWD)
+# chmod +x "$RELATIVE_PATH/""deploy.sh"
+# $("$RELATIVE_PATH/""deploy.sh")
 
