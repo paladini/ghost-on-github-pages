@@ -25,8 +25,9 @@ first_deploy() {
 		git remote add origin "$remote_url"
 		git add -A
 		git commit -m "First commit on Github Pages using Ghost."
-		git push origin master -f
-		git push origin master:gh-pages
+		# git push origin master -f
+		# git push origin master:gh-pages -f
+		git push origin master:master master:gh-pages -f
 	fi
 }
 
@@ -40,8 +41,8 @@ update() {
 		# Commiting changes to repository in order to deploy new content.
 		git add -A
 		git commit -m "Update on the website at $(date)"
-		git push origin master
-		git push origin master:gh-pages
+		git push origin master:master master:gh-pages -f
+		# git push origin master:gh-pages -f 
 	fi
 }
 		

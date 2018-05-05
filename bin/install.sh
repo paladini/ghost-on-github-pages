@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
+RELATIVE_PATH=$(dirname "$0")
 GHOST_ZIP=includes/latest_ghost_release.zip
 HOME_PATH=$HOME
 GHOST_PATH="${HOME_PATH}/.ghost/"
-RELATIVE_PATH=$(dirname "$0")
+
 # CURRENT_PATH=$(dirname "$0")
 # CURRENT_SCRIPT_PATH=$(readlink -f "$0")
 
@@ -169,13 +170,13 @@ local_run() {
 	fi
 }
 
-local_setup
-local_deps
-local_run
-# cd "$(pwd)"
+# local_setup
+# local_deps
+# local_run
+cd "$(pwd)"
 # # cd "$(dirname $0)"
-# echo "$(pwd)"
+echo "$(pwd)"
 # # $(PWD)
-# chmod +x "$RELATIVE_PATH/""deploy.sh"
-# $("$RELATIVE_PATH/""deploy.sh")
+chmod +x "$RELATIVE_PATH/""deploy.sh"
+$("$RELATIVE_PATH/""deploy.sh")
 
