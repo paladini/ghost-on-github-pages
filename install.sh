@@ -99,9 +99,21 @@ local_setup() {
 		# Installing local version of Ghost
 		echo '[INFO] Trying to install Ghost using Ghost-CLI...'
 		echo '[INFO] Installing Ghost at' "$GHOST_PATH"
-		ghost install local --no-start
+		ghost install local --no-start --enable
 	fi
 	# echo '[INFO] Finished!'
+}
+
+move_includes() {
+	if [ ! -d "includes/" ]; then
+		cd "$RELATIVE_PATH"
+	fi
+	cp includes/deploy.sh "$GHOST_PATH/"
+	cp includes/deploy.sh "$GHOST_PATH""/current/"
+	cp includes/index.html "$GHOST_PATH""/current/"
+	cp includes/gitignore.base "$GHOST_PATH""/current/"
+	cp includes/gitignore.base "$GHOST_PATH""/current/.gitignore"
+	chmod +x "$GHOST_PATH""/deploy.sh"
 }
 
 local_deps() {
@@ -166,17 +178,18 @@ local_run() {
 	if [ -d "$GHOST_PATH" ]; then
 		echo '[INFO] Starting Ghost server...'
 		cd "$GHOST_PATH"
-		ghost start
+		ghost start --enable
 	fi
 }
 
-# local_setup
-# local_deps
-# local_run
-cd "$(pwd)"
+local_setup
+local_deps
+local_run
+move_includes
+# cd "$(pwd)"
 # # cd "$(dirname $0)"
-echo "$(pwd)"
+# echo "$(pwd)"
 # # $(PWD)
-chmod +x "$RELATIVE_PATH/""deploy.sh"
-$("$RELATIVE_PATH/""deploy.sh")
+# chmod +x "$RELATIVE_PATH/""deploy.sh"
+# $("$RELATIVE_PATH/""deploy.sh")
 

@@ -4,6 +4,10 @@ HOME_PATH=$HOME
 GHOST_PATH="${HOME_PATH}/.ghost/current"
 GHOST_SERVER_URL="localhost:2373/"
 
+copy_includes() {
+	
+}
+
 first_deploy() {
 	if [ -d "$GHOST_PATH" ]; then
 		cd "$GHOST_PATH"
@@ -23,10 +27,15 @@ first_deploy() {
 
 		git init
 		git remote add origin "$remote_url"
+
+		# Add .gitignore
+		if [ -f "gitignore.base" ]; then
+			$(rm -f .gitignore)
+			$(cp gitignore.base .gitignore)
+		fi
+		
 		git add -A
 		git commit -m "First commit on Github Pages using Ghost."
-		# git push origin master -f
-		# git push origin master:gh-pages -f
 		git push origin master:master master:gh-pages -f
 	fi
 }
@@ -42,7 +51,6 @@ update() {
 		git add -A
 		git commit -m "Update on the website at $(date)"
 		git push origin master:master master:gh-pages -f
-		# git push origin master:gh-pages -f 
 	fi
 }
 		
