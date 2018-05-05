@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 GHOST_ZIP=includes/latest_ghost_release.zip
 HOME_PATH=$HOME
 GHOST_PATH="${HOME_PATH}/.ghost/"
@@ -97,19 +97,16 @@ local_deps() {
 	echo '[INFO] Installing needed dependencies...'
 
 	cd "$GHOST_PATH"
-	error=0
 	success=0
 	check_pip=$(which pip)
 	check_pip2=$(which pip2)
 	check_pip27=$(which pip2.7)
-	# check_pip3=$(which pip3)
 
 	if [ "$check_pip" ]; then
 		pip install buster
 		success=`expr $success + 1`
 	else
 		echo "[INFO] Command 'pip' was not found on path..."
-		error=`expr $error + 1`
 	fi
 
 	if [ "$check_pip2" ]; then
@@ -117,7 +114,6 @@ local_deps() {
 		success=`expr $success + 1`
 	else
 		echo "[INFO] Command 'pip2' was not found on path..."	
-		error=`expr $error + 1`
 	fi
 
 	if [ "$check_pip27" ]; then
@@ -125,7 +121,6 @@ local_deps() {
 		success=`expr $success + 1`
 	else
 		echo "[INFO] Command 'pip2.7' was not found on path..."	
-		error=`expr $error + 1`
 	fi
 
 	# Checking if pip was found and 'buster' was successfully installed.
@@ -133,7 +128,7 @@ local_deps() {
 		echo "[WARN] Command pip cannot be found on your system."
 		echo "[WARN] Trying to install pip for Python 2..."
 
-		# Trying to install pip for different OSs
+		# Trying to install pip for different OSs (MacOS and Linux)
 		if [ "$(uname)" == "Darwin" ]; then
 			echo '[INFO] Mac OS detected.'
 			sudo easy_install pip
@@ -151,16 +146,9 @@ local_deps() {
 			exit
 		fi
 	fi
-	echo '[INFO] pip and Buster packages were successfully installed.'
+	
+	# echo '[INFO] pip and Buster packages were successfully installed.'
 	echo '[INFO] Done! Dependencies appears to be okay.'
-	# if [ "$check_pip3" ]; then
-	# 	pip3 install buster
-	# else
-	# 	echo "Command 'pip3' was not found on path..."
-	# 	error=`expr $error + 1`
-	# 	# echo "Any Python package manager was found, please install 'pip' for Python and try again."
-	# 	# exit
-	# fi
 }
 
 local_run() {
@@ -171,7 +159,7 @@ local_run() {
 	fi
 }
 
-# local_setup
+local_setup
 local_deps
-# local_run
+local_run
 
