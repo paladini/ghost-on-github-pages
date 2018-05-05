@@ -94,48 +94,84 @@ local_setup() {
 }
 
 local_deps() {
+	echo '[INFO] Installing needed dependencies...'
+
 	cd "$GHOST_PATH"
+	error=0
+	success=0
 	check_pip=$(which pip)
 	check_pip2=$(which pip2)
+	check_pip27=$(which pip2.7)
+	# check_pip3=$(which pip3)
 
 	if [ "$check_pip" ]; then
 		pip install buster
+		success=`expr $success + 1`
 	else
-		echo "Python package manager (pip) was not found. Trying 'pip2' instead."
+		echo "[INFO] Command 'pip' was not found on path..."
+		error=`expr $error + 1`
+	fi
 
-		if [ "$check_pip2" ]; then
-			pip2 install buster
+	if [ "$check_pip2" ]; then
+		pip2 install buster
+		success=`expr $success + 1`
+	else
+		echo "[INFO] Command 'pip2' was not found on path..."	
+		error=`expr $error + 1`
+	fi
+
+	if [ "$check_pip27" ]; then
+		pip2.7 install buster
+		success=`expr $success + 1`
+	else
+		echo "[INFO] Command 'pip2.7' was not found on path..."	
+		error=`expr $error + 1`
+	fi
+
+	# Checking if pip was found and 'buster' was successfully installed.
+	if [ "$success" -eq "0" ]; then
+		echo "[WARN] Command pip cannot be found on your system."
+		echo "[WARN] Trying to install pip for Python 2..."
+
+		# Trying to install pip for different OSs
+		if [ "$(uname)" == "Darwin" ]; then
+			echo '[INFO] Mac OS detected.'
+			sudo easy_install pip
+			sudo pip install --upgrade virtualenv
+			sudo pip install buster
+		elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+			echo '[INFO] Linux detected.'
+			sudo apt-get install python-setuptools python-dev build-essential 
+			sudo easy_install pip
+			sudo pip install --upgrade virtualenv
+			sudo pip install buster
 		else
-			echo "Any Python package manager was found, please install 'pip' for Python and try again."
+			echo '[ERROR] Operating System not supported yet. Please, open a Github Issue at https://github.com/paladini/ghost-on-github-pages/issues telling about this problem.'
+			echo "[ERROR] Since 'pip' for Python 2 and 'buster' was not found and cannot be installed, I'm exiting this installation script now."
 			exit
 		fi
 	fi
+	echo '[INFO] pip and Buster packages were successfully installed.'
+	echo '[INFO] Done! Dependencies appears to be okay.'
+	# if [ "$check_pip3" ]; then
+	# 	pip3 install buster
+	# else
+	# 	echo "Command 'pip3' was not found on path..."
+	# 	error=`expr $error + 1`
+	# 	# echo "Any Python package manager was found, please install 'pip' for Python and try again."
+	# 	# exit
+	# fi
 }
 
 local_run() {
 	if [ -d "$GHOST_PATH" ]; then
-		# echo '[INFO] Ghost found at' "$GHOST_PATH"
 		echo '[INFO] Starting Ghost server...'
 		cd "$GHOST_PATH"
 		ghost start
 	fi
-	# else
-	# 	echo '[INFO] Installing Ghost-CLI...'
-	# 	mkdir -p "$GHOST_PATH"
-	# 	cd $GHOST_PATH
-	
-	# 	# Installing Ghost CLI
-	# 	npm i -g ghost-cli@latest
-
-	# 	# Installing local version of Ghost
-	# 	echo '[INFO] Installing Ghost using Ghost-CLI...'
-	# 	echo 'Installation folder: $GHOST_PATH'
-	# 	ghost install local --no-start
-	# fi
-	# echo '[INFO] Ghost server s!'
 }
 
-local_setup
+# local_setup
 local_deps
-local_run
+# local_run
 
