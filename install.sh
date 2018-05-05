@@ -108,12 +108,12 @@ move_includes() {
 	if [ ! -d "includes/" ]; then
 		cd "$RELATIVE_PATH"
 	fi
-	cp includes/deploy.sh "$GHOST_PATH/"
-	cp includes/deploy.sh "$GHOST_PATH""/current/"
-	cp includes/index.html "$GHOST_PATH""/current/"
-	cp includes/gitignore.base "$GHOST_PATH""/current/"
-	cp includes/gitignore.base "$GHOST_PATH""/current/.gitignore"
-	chmod +x "$GHOST_PATH""/deploy.sh"
+	$(cp includes/deploy.sh "$GHOST_PATH/")
+	$(cp includes/deploy.sh "$GHOST_PATH""/current/")
+	$(cp includes/index.html "$GHOST_PATH""/current/")
+	$(cp includes/gitignore.base "$GHOST_PATH""/current/")
+	$(cp includes/gitignore.base "$GHOST_PATH""/current/.gitignore")
+	$(chmod +x "$GHOST_PATH""/deploy.sh")
 }
 
 local_deps() {
@@ -186,10 +186,5 @@ local_setup
 local_deps
 local_run
 move_includes
-# cd "$(pwd)"
-# # cd "$(dirname $0)"
-# echo "$(pwd)"
-# # $(PWD)
-# chmod +x "$RELATIVE_PATH/""deploy.sh"
-# $("$RELATIVE_PATH/""deploy.sh")
 
+(cd "$GHOST_PATH" && ./deploy.sh)

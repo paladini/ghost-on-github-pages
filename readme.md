@@ -8,12 +8,17 @@ In order to create your own Ghost blog for free and host it at Github pages, che
 
 **Note:** that the first time installation take some time (about 10 minutes), but after that you just need to run `npm start` to use Ghost at your computer (creating posts, modifying the website, etc.) and `./update_website.sh` to send the changes to your website. Simple as that.
 
-## Prerequisites
-Before we start, you need to install some prerequisites:
-- [**pip**](https://pip.pypa.io/en/stable/quickstart/): Python 2.7.9 and later comes with *pip* by default, so it won't will bother you.
+## Requirements
+Make sure you have the following packages installed in your computer:
+
+- Python 2: some Python 2.X is required because `buster` doesn't support Python 3.
+- [**NodeJS**](https://nodejs.org/en/): you should install a [NodeJS version that is officially supported by Ghost](http://support.ghost.org/supported-node-versions/). Node Version Manager (nvm) is recommended for many NodeJS versions on the same machine.
+- [**npm**](https://nodejs.org/en/): NodeJS package manager.
+
+<!-- - [**pip**](https://pip.pypa.io/en/stable/quickstart/): Python 2.7.9 and later comes with *pip* by default, so it won't will bother you.
 - [**buster**](https://pypi.python.org/pypi/buster/0.1.3): a Python package.
 - [**NodeJS**](https://nodejs.org/en/): make sure that your [NodeJS version is officially supported by latest Ghost release](http://support.ghost.org/supported-node-versions/).
-- [**npm**](https://nodejs.org/en/): NodeJS package manager.
+- [**npm**](https://nodejs.org/en/): NodeJS package manager. -->
 
 ## Installing for the first time
 #### 1) Download the latest version of Ghost at [Ghost download page](https://ghost.org/developers/).
