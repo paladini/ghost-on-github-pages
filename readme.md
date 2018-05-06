@@ -34,14 +34,44 @@ There's some other dependencies that should be installed in order to this script
 
 ## Setup
 
-**1) Download [the latest version from `ghost-on-github-pages` repository](https://github.com/paladini/ghost-on-github-pages/archive/master.zip).**
+**1) Download the latest version from `ghost-on-github-pages` by [clicking here](https://github.com/paladini/ghost-on-github-pages/archive/master.zip).**
 ![image](https://user-images.githubusercontent.com/3361224/39668046-c66d1c90-5099-11e8-81d3-f8dd34527c58.png)
 
-**2) Extract it anywhere. E.g: I've extract this file to `
-#### 2) Extract it somewhere you'll remember. In my example, at `/home/paladini/ghost`.
-![Extract the Ghost folder somewhere you'll remember](http://i.imgur.com/wFx9uEu.png)
+**2) Extract it anywhere. E.g: I've extract this file to `/home/1doctecnologia/ghost-on-github-pages`:**
+![image](https://user-images.githubusercontent.com/3361224/39670056-92682f46-50d2-11e8-9c78-2bee3fcb0cb2.png)
 
-#### 3) Open the Terminal and navigate to the extracted folder. Run `npm install`.
+**3) Open a new Terminal window and navigate to the extracted folder. After that, make the script executable by running:**
+
+```
+$ chmod +x install.sh
+```
+
+**4) Create a new repository that is going to store your Ghost blog, all of it's deploys and also give you a free domain related to the repository name.** Since I want a website for a new Github project, I've created [`ghost-on-github-pages-demo`](https://github.com/paladini/ghost-on-github-pages-demo), a public and (currently) empty repository:
+
+![image](https://user-images.githubusercontent.com/3361224/39670135-6a6347c2-50d4-11e8-8884-f790897f3fc1.png)
+
+### IMPORTANT!
+Copy the repository remote URL to your clipboard (SSH or HTTPS), because you will be asked to provide this later. E.g: `git@github.com:paladini/ghost-on-github-pages-demo.git`.
+
+**5) Now you can run the installation process, that will take a few minutes to complete. Run the command:**
+
+```
+$ ./install.sh
+```
+
+Remember that during the installation process you will be asked for the repository remote URL.
+
+**6) If succeeded, you can now customize and configure your blog [from your localhost:2373](http://localhost:2373/ghost).** 
+
+The Ghost server should be running on your localhost at port 2373. To visit Ghost Administrative Panel, access [`http://localhost:2373/ghost`](http://localhost:2373/ghost) on your web browser.
+
+![image](https://user-images.githubusercontent.com/3361224/39670402-5ac1d0bc-50da-11e8-85f3-3335f19a77b0.png)
+
+At this time, all the static files generated from your local Ghost server should be visible on your recently created Github repository, both at branch `master` and `gh-pages` (they're mirrored). According to Github, it can take up to 10 minutes to your Ghost blog go live at [http://YOUR_USERNAME.github.io/YOUR_REPOSITORY](http://YOUR_USERNAME.github.io/YOUR_REPOSITORY)
+
+Create a new user and feel free to customize everything you want to.
+
+**3) Using Terminal, go to`~/.ghost` folder and there you'll see installed files.** There's a script called `deploy.sh` that you should run whenever you want to send updates to your live blog.
 ![Run "npm install". This step will take several minutes.](http://i.imgur.com/jUBPv3h.png)
 
 #### 4) Now we've Ghost installed. Let's start it's localhost server running `npm start`:
@@ -78,6 +108,11 @@ git push origin master -f
 Whenever you want to create a new post, change the theme of the site (etc.), you should run `npm start` inside the Ghost folder to start the server at the localhost. Then you can go to [http://localhost:2368/ghost/](http://localhost:2368/ghost/) and do whatever you want to.
 
 To send the changes to your page, just run `./update_website.sh` from the Terminal. Remember that Github takes about 10 minutes to update the website.
+
+## FAQ
+
+**1) Where is located Ghost files?**
+Ghost and all scripts you may need will be placed at `.ghost` folder inside your Home directory, i.e: `/home/YOUR_USERNAME/.ghost`.
 
 ## About
 This readme was created in less than one hour, so if it have any problems or you has some question in some topic, please contact me at fernandopalad at gmail dot com. Feel free to improve it or make any critics.
