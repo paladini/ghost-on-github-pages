@@ -94,6 +94,25 @@ $ ./deploy.sh
 
 Remember that Github takes about 10 minutes to update the website.
 
+### Example
+
+I wrote and published a test article on my local Ghost blog:
+
+![image](https://user-images.githubusercontent.com/3361224/39675360-86527190-5130-11e8-9537-eb50723c554c.png)
+
+After that, I opened a Terminal window, go to the Ghost installation folder (`$HOME/.ghost`) and then run the following command:
+
+```
+$ ./deploy.sh
+```
+
+Running the script, my updates on blog are sent to my blog on Github Pages. A few moments later I refreshed the [home page of my blog](http://paladini.github.io/ghost-on-github-pages-demo/static/index.html) and then find out my new article:
+
+![image](https://user-images.githubusercontent.com/3361224/39675421-4c9d4ef6-5131-11e8-96b1-10a99129d08c.png)
+
+And that's all :) 
+
+
 ## FAQ
 
 **1) Where is located Ghost files?**
