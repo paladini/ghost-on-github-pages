@@ -11,9 +11,14 @@
 That was made possible because we've created some powerful automation scripts to deploy your Ghost blog as static content on Github Pages. Interested? Join us throughout this guide, but first [check out the live demo here](http://paladini.github.io/ghost-on-github-pages-demo/).
 
 ## Table of Contents
+
   * [Requirements](#requirements)
   * [Setup](#setup)
-  * [Updating your blog](#updating-your-blog)
+    + [1) Download and extract `ghost-on-github-pages`](#1-download-and-extract-ghost-on-github-pages)
+    + [3) Create a new Github repository](#3-create-a-new-github-repository)
+    + [4) Install](#4-install)
+    + [5) Deploying to Github Pages](#5-deploying-to-github-pages)
+  * [How to update your blog?](#how-to-update-your-blog)
   * [FAQ](#faq)
   * [About](#about)
 
@@ -29,41 +34,37 @@ Besides that, there's some minor dependencies too, but they should be automatica
 
 ## Setup
 
-### 1) Download latest version from `ghost-on-github-pages`
-Download the latest version of this repository code [by clicking here](https://github.com/paladini/ghost-on-github-pages/archive/master.zip).**
-
-![image](https://user-images.githubusercontent.com/3361224/39668046-c66d1c90-5099-11e8-81d3-f8dd34527c58.png)
-
-**2) Extract it anywhere. E.g: I've extract this file to `/home/1doctecnologia/ghost-on-github-pages`:**
+### 1) Download and extract `ghost-on-github-pages`
+Download the latest version of this repository code [by clicking here](https://github.com/paladini/ghost-on-github-pages/archive/master.zip). After downloading the project, extract it anywhere you'll remember later. E.g: I've extract the .zip file to `/home/1doctecnologia/ghost-on-github-pages`:
 
 ![image](https://user-images.githubusercontent.com/3361224/39670056-92682f46-50d2-11e8-9c78-2bee3fcb0cb2.png)
 
-**3) Open a new Terminal window and navigate to the extracted folder. After that, make the script executable by running:**
+### 2) Create a new Github repository
+Create a new repository that is going to store your Ghost blog and also give you a free Github Pages domain. I've created a public Github repo called [`ghost-on-github-pages-demo`](https://github.com/paladini/ghost-on-github-pages-demo) to use as example throughout this guide.
+
+**[IMPORTANT]** Copy the repository remote URL to your clipboard (SSH or HTTPS), because you will be asked to provide this later. E.g: `git@github.com:paladini/ghost-on-github-pages-demo.git`.
+
+
+### 3) Install
+
+Now we are ready to install everything needed using the script called `install.sh`. Open a new Terminal window, navigate to the previous extract folder and then run:
 
 ```
 $ chmod +x install.sh
-```
-
-**4) Create a new repository that is going to store your Ghost blog and also give you a free Github Pages domain.** I've created a public Github repo called [`ghost-on-github-pages-demo`](https://github.com/paladini/ghost-on-github-pages-demo) to use as example throughout this guide.
-
-#### IMPORTANT!
-Copy the repository remote URL to your clipboard (SSH or HTTPS), because you will be asked to provide this later. E.g: `git@github.com:paladini/ghost-on-github-pages-demo.git`.
-
-**5) Run the installation script:**
-
-```
 $ ./install.sh
 ```
 
-During the process you will be asked to enter the repository remote URL that was copied to your clipboard in previous step.
+During the process you will be asked to enter the repository remote URL that was copied to your clipboard in the previous step.
 
-**6) First Deploy: a default Ghost blog is going to be live .**
+Everything will be installed at `/home/YOUR_USERNAME/.ghost/` (e.g: `/home/paladini/.ghost`). _Everything_ means the local Ghost server, a few static files required by GH Pages and some useful scripts for deploying your blog on Github Pages.
 
-It's important to know that installation process will create a new folder located at `/home/YOUR_USERNAME/.ghost/`. This folder will contain the local Ghost server and some useful scripts for deploying your blog on Github Pages.
+In the end, the script will start Ghost server and then make a first deploy to Github. All the static files generated from default Ghost blog will be commited to your Github repository. However it can take up to 10 minutes to your Ghost blog go live at [http://YOUR_USERNAME.github.io/YOUR_REPOSITORY](http://YOUR_USERNAME.github.io/YOUR_REPOSITORY). It should look like this:
 
-In the end, the installation script will make a first deploy to Github, so all the static files generated from  default Ghost installation were commited to your recently created repository. However it can take up to 10 minutes to your Ghost blog go live at [http://YOUR_USERNAME.github.io/YOUR_REPOSITORY](http://YOUR_USERNAME.github.io/YOUR_REPOSITORY). You can see [my Ghost blog live at GH Pages by clicking here](http://paladini.github.io/ghost-on-github-pages-demo/).
+![image](https://user-images.githubusercontent.com/3361224/39674582-58571054-5124-11e8-8326-0fe6c4747620.png)
 
-**7) Second Deploy: your custom blog will go live.**
+[You can see my Ghost blog here](http://paladini.github.io/ghost-on-github-pages-demo/).
+
+### 4) Deploying to Github Pages
 Let's customize your Ghost blog for the first time. To do that, we are going to access the administrative panel that's running at [http://localhost:2373/ghost](http://localhost:2373/ghost).
 
 A Ghost initial setup screen will appear and you should complete the setup to continue. After that, you can explore the beautiful Ghost Administrative Panel and change whatever you like:
@@ -83,8 +84,8 @@ $ ./deploy.sh
 
 The `deploy.sh` script will make a push to your Github repository, modifying both `master` and `gh-pages` branches with the changes you've made. The updated blog should go live very soon at the same address ([http://YOUR_USERNAME.github.io/YOUR_REPOSITORY](http://YOUR_USERNAME.github.io/YOUR_REPOSITORY)).
 
-## Updating your blog
-Whenever you want to create a new article, change the blog theme or any other modification on your Ghost blog, just open a new Terminal window and run the following commands:
+## How to update your blog?
+Whenever you want to update your blog (e.g: create a new article, change the blog theme, etc.), just open your local Ghost blog and make all desired modifications. When finished, open a Terminal window and run the following commands to deploy your changes from the local Ghost blog to Github Pages:
 
 ```
 $ cd ~/.ghost
