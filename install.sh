@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-RELATIVE_PATH=$(dirname "$0")
-GHOST_ZIP=includes/latest_ghost_release.zip
 HOME_PATH=$HOME
 GHOST_PATH="${HOME_PATH}/.ghost/"
 
-# Operating system specific instructions
-if [ "$(uname -s)" = 'Linux' ]; then
-	CURRENT_SCRIPT_PATH=$(readlink -f "$0")
-else
-	CURRENT_SCRIPT_PATH=$(readlink "$0")
-fi
-CURRENT_FOLDER_PATH=$(dirname "$CURRENT_SCRIPT_PATH")
+# Get absolute path for the script being executed.
+# Based on https://gist.github.com/TheMengzor/968e5ea87e99d9c41782
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do 
+  ABSOLUTE_PATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$ABSOLUTE_PATH/$SOURCE"
+done
+ABSOLUTE_PATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 check_ghost_folder() {
 	if [ ! -d "includes/ghost" ]; then
@@ -33,21 +33,18 @@ local_setup() {
 		# Installing local version of Ghost
 		echo '[INFO] Trying to install Ghost using Ghost-CLI...'
 		echo '[INFO] Installing Ghost at' "$GHOST_PATH"
-		ghost install local --no-start --enable
+		ghost install local --no-start --enable --port 2373
 	fi
-	# echo '[INFO] Finished!'
 }
 
 move_includes() {
-	if [ ! -d "includes/" ]; then
-		cd "$RELATIVE_PATH"
-	fi
-	$(cp includes/deploy.sh "$GHOST_PATH/")
-	$(cp includes/deploy.sh "$GHOST_PATH""/current/")
-	$(cp includes/index.html "$GHOST_PATH""/current/")
-	$(cp includes/gitignore.base "$GHOST_PATH""/current/")
-	$(cp includes/gitignore.base "$GHOST_PATH""/current/.gitignore")
+	$(cp "$ABSOLUTE_PATH"/includes/deploy.sh "$GHOST_PATH/")
+	$(cp "$ABSOLUTE_PATH"/includes/uninstall.sh "$GHOST_PATH/")
+	$(cp "$ABSOLUTE_PATH"/includes/index.html "$GHOST_PATH""/current/")
+	$(cp "$ABSOLUTE_PATH"/includes/gitignore.base "$GHOST_PATH""/current/")
+	$(cp "$ABSOLUTE_PATH"/includes/gitignore.base "$GHOST_PATH""/current/.gitignore")
 	$(chmod +x "$GHOST_PATH""/deploy.sh")
+	$(chmod +x "$GHOST_PATH""/uninstall.sh")
 }
 
 local_deps() {
@@ -104,7 +101,6 @@ local_deps() {
 		fi
 	fi
 	
-	# echo '[INFO] pip and Buster packages were successfully installed.'
 	echo '[INFO] Done! Dependencies appears to be okay.'
 }
 
@@ -120,5 +116,4 @@ local_setup
 local_deps
 local_run
 move_includes
-
 (cd "$GHOST_PATH" && ./deploy.sh)
