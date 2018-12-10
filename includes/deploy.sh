@@ -49,6 +49,11 @@ update() {
 		# Generating static files
 		buster generate --domain="$GHOST_SERVER_URL"
 
+		echo ' -------------------- FIXING LINKS  -------------------- '
+		echo ''
+		read -p "Github username: "  gh_username
+		echo "Leave blank if repo name is username.github.io"
+		read -p "Repo name: " gh_repo
 		# Fixing Links
 		find static -name *.html -type f -exec sed -i '''s#http://localhost:2373#'$gh_username'.github.io/'$gh_repo'#g' {} \;
 
