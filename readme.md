@@ -2,6 +2,8 @@
 
 ![image](https://user-images.githubusercontent.com/3361224/39667855-7f37e624-5095-11e8-9297-6a2e63aaac4b.png)
 
+Demo Version: [http://paladini.github.io/ghost-on-github-pages-demo/](http://paladini.github.io/ghost-on-github-pages-demo/)
+
 [Ghost](https://github.com/tryghost/Ghost) is a fully open source, adaptable platform for building and running a modern online publication - a complete professional publishing platform. **Now you can build your own Ghost blog for free in a few minutes.** After that initial setup, it's very easy to maintain a fresh and modern blog. 
 
 <div align="center">
@@ -26,9 +28,30 @@ That was made possible because we've created some powerful automation scripts to
 
 Major dependencies should be installed in your computer. This is only step currently done by your own.
 
-- [Python 2](https://www.python.org/download/releases/2.7.2/): install some of Python 2.X, because `buster` package doesn't support Python 3.
-- [NodeJS](https://nodejs.org/en/): [install a version that is officially supported by Ghost](https://docs.ghost.org/docs/supported-node-versions), just like Node v6.9 or Node v8.9.
-- [npm](https://nodejs.org/en/): NodeJS package manager.
+
+### Install [Python 2](https://www.python.org/download/releases/2.7.2/)
+Install Python 2.X, because buster package doesn't support Python 3.
+```
+# Debian-based systems
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt-get update
+sudo apt-get install python2.7
+```
+
+### Install [NodeJS](https://docs.ghost.org/docs/supported-node-versions)
+Install a version that is officially supported by Ghost, just like Node v6.9 or Node v8.9.
+```
+# Debian-based systems
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
+### Install [npm](https://nodejs.org/en/)
+NodeJS package manager from `https://nodejs.org/en/`
+```
+# Debian-based systems
+sudo apt install npm
+```
 
 Besides that, there's some minor dependencies too, but they should be automatically installed for you (tested on  MacOS High Sierra and Ubuntu 16.04). If needed, [check out the minor dependencies here](https://github.com/paladini/ghost-on-github-pages/wiki/Minor-dependencies) and install by yourself.
 
