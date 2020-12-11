@@ -1,5 +1,7 @@
 # Ghost on Github Pages
 
+**We need contributions via Pull Requests in order to maintain this as a working solution. Please, if possible send your contribution!**
+
 ![image](https://user-images.githubusercontent.com/3361224/39667855-7f37e624-5095-11e8-9297-6a2e63aaac4b.png)
 
 Demo Version: [http://paladini.github.io/ghost-on-github-pages-demo/](http://paladini.github.io/ghost-on-github-pages-demo/)
