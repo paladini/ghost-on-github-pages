@@ -41,10 +41,10 @@ sudo apt-get install python2.7
 ```
 
 ### Install [NodeJS](https://docs.ghost.org/docs/supported-node-versions)
-Install a version that is officially supported by Ghost, just like Node v6.9 or Node v8.9.
+Install a version that is officially supported by Ghost, just like Node v14.x.
 ```
 # Debian-based systems
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash
 sudo apt-get install -y nodejs
 ```
 
