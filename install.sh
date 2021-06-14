@@ -108,7 +108,7 @@ local_run() {
 	if [ -d "$GHOST_PATH" ]; then
 		echo '[INFO] Starting Ghost server...'
 		cd "$GHOST_PATH"
-		ghost start --enable
+		ghost start --enable --port 2373
 	fi
 }
 
