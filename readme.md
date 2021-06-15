@@ -39,6 +39,12 @@ sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt-get update
 sudo apt-get install python2.7
 ```
+#### pip2
+```
+# Debian-based systems
+wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
+sudo python get-pip.py
+```
 
 ### Install [NodeJS](https://docs.ghost.org/docs/supported-node-versions)
 Install a version that is officially supported by Ghost, just like Node v14.x.
