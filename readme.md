@@ -39,7 +39,7 @@ sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt-get update
 sudo apt-get install python2.7
 ```
-#### Install [pip2](https://www.python.org/download/releases/2.7.2/)
+### Install [pip2](https://www.python.org/download/releases/2.7.2/)
 ```
 # Debian-based systems
 wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
