@@ -8,7 +8,7 @@ GHOST_SERVER_URL="localhost:${GHOST_PORT}/"
 PUBLISH_PATH="${GHOST_INSTALL}/publish"
 DEPLOY_CONF="${GHOST_INSTALL}/deploy.conf"
 SITES_CONF="${GHOST_INSTALL}/sites.conf"
-SCRIPT_VERSION="2.0.2"
+SCRIPT_VERSION="2.1.0"
 
 die() {
 	echo "[ERROR] $*" >&2
