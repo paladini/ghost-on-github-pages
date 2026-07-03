@@ -30,7 +30,7 @@ require_command() {
 }
 
 ghost_current_ready() {
-	[ -d "${GHOST_PATH}" ] && [ -f "${GHOST_PATH}/config.development.json" -o -L "${GHOST_PATH}" ]
+	[ -d "${GHOST_PATH}" ] && { [ -f "${GHOST_PATH}/config.development.json" ] || [ -L "${GHOST_PATH}" ]; }
 }
 
 production_domain_for() {

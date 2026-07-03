@@ -2,8 +2,6 @@
 
 set -euo pipefail
 
-HOME_PATH="${HOME}"
-GHOST_INSTALL="${HOME_PATH}/.ghost"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=lib/common.sh
 source "${SCRIPT_DIR}/lib/common.sh"
@@ -57,7 +55,7 @@ if [ -f "$INCLUDE_INDEX" ]; then
 	cp "$INCLUDE_INDEX" "$PUBLISH_PATH/index.html"
 fi
 
-"${SCRIPT_DIR}/scripts/validate-static.sh" "$PUBLISH_PATH/static"
+"${GHOST_INSTALL}/scripts/validate-static.sh" "$PUBLISH_PATH/static"
 
 cd "$PUBLISH_PATH" || die "Could not open publish folder."
 
