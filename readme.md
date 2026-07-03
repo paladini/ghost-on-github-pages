@@ -6,7 +6,7 @@
 >
 > - **Start a new blog (recommended):** [Getting started guide](docs/v3/GETTING-STARTED.md) · [Download v3.0.0](https://github.com/paladini/ghost-on-github-pages/releases/latest)
 > - **Already using the old version?** [Migration guide](docs/MIGRATION.md) · run `./migrate.sh`
-> - **Want the Classic version?** [Download v2.0.1](https://github.com/paladini/ghost-on-github-pages/releases/tag/v2.0.1) · [Legacy docs](docs/legacy/README.md)
+> - **Want the Classic version?** [Download v2.1.0 (latest Classic)](https://github.com/paladini/ghost-on-github-pages/releases/tag/v2.1.0) · [Frozen v2.0.1](https://github.com/paladini/ghost-on-github-pages/releases/tag/v2.0.1) · [Legacy docs](docs/legacy/README.md)
 
 ![Ghost on GitHub Pages](https://user-images.githubusercontent.com/3361224/39667855-7f37e624-5095-11e8-9297-6a2e63aaac4b.png)
 
@@ -16,14 +16,14 @@
 
 ## Which version should I use?
 
-| | **v3.0 (New — recommended)** | **v2.0.1 (Classic — legacy)** |
+| | **v3.0 (New — recommended)** | **v2.x (Classic — maintenance)** |
 |---|---|---|
 | Static site tool | gssg (installed via Node) | buster (Python 2) |
-| What you need to install | Node + wget + Ghost | Node + Python 2 + pip + buster + Ghost |
-| Support | Active | Frozen (no new fixes) |
-| Open issues fixed | Yes — see [CHANGELOG](CHANGELOG.md) | Will not receive fixes |
-| Download | [Latest release](https://github.com/paladini/ghost-on-github-pages/releases/latest) | [v2.0.1](https://github.com/paladini/ghost-on-github-pages/releases/tag/v2.0.1) |
-| Documentation | [docs/v3/](docs/v3/) | [docs/legacy/](docs/legacy/) |
+| What you need to install | Node + wget + Ghost | Node + Python 2 + pip2 + buster + Ghost |
+| Support | Active (new features) | Maintenance on branch `classic/v2` |
+| Open issues fixed | Yes — see [CHANGELOG](CHANGELOG.md) | Most fixes in [v2.1.0](https://github.com/paladini/ghost-on-github-pages/releases/tag/v2.1.0) |
+| Download | [Latest release](https://github.com/paladini/ghost-on-github-pages/releases/latest) | [v2.1.0](https://github.com/paladini/ghost-on-github-pages/releases/tag/v2.1.0) · [v2.0.1 frozen](https://github.com/paladini/ghost-on-github-pages/releases/tag/v2.0.1) · [legacy/v2.0.1 alias](https://github.com/paladini/ghost-on-github-pages/releases/tag/legacy/v2.0.1) |
+| Documentation | [docs/v3/](docs/v3/) | [docs/legacy/](docs/legacy/) · [classic/v2 branch](https://github.com/paladini/ghost-on-github-pages/tree/classic/v2) |
 
 ## Quick start (version 3)
 
