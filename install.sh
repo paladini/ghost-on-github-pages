@@ -1,119 +1,156 @@
 #!/usr/bin/env bash
-HOME_PATH=$HOME
-GHOST_PATH="${HOME_PATH}/.ghost/"
 
-# Get absolute path for the script being executed.
-# Based on https://gist.github.com/TheMengzor/968e5ea87e99d9c41782
+set -euo pipefail
+
+HOME_PATH="${HOME}"
+GHOST_INSTALL="${HOME_PATH}/.ghost"
+GHOST_PORT="${GHOST_PORT:-2373}"
+
 SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do 
-  ABSOLUTE_PATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-  SOURCE="$(readlink "$SOURCE")"
-  [[ $SOURCE != /* ]] && SOURCE="$ABSOLUTE_PATH/$SOURCE"
+while [ -h "$SOURCE" ]; do
+	ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+	SOURCE="$(readlink "$SOURCE")"
+	[[ $SOURCE != /* ]] && SOURCE="$ABSOLUTE_PATH/$SOURCE"
 done
-ABSOLUTE_PATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+ABSOLUTE_PATH="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 
-check_ghost_folder() {
-	if [ ! -d "includes/ghost" ]; then
-		echo '[ERROR] Ghost not found at includes/ghost!!! Exiting...'
-		exit
-	fi
+# shellcheck source=includes/lib/common.sh
+source "${ABSOLUTE_PATH}/includes/lib/common.sh"
+
+SKIP_DEPLOY=0
+
+usage() {
+	echo "Usage: install.sh [--skip-deploy]"
+	echo ""
+	echo "  Sets up Ghost on your computer (Classic version with buster)."
 }
+
+while [ $# -gt 0 ]; do
+	case "$1" in
+		--skip-deploy)
+			SKIP_DEPLOY=1
+			shift
+			;;
+		-h|--help)
+			usage
+			exit 0
+			;;
+		*)
+			die "Unknown option: $1"
+			;;
+	esac
+done
+
+info "Ghost on GitHub Pages Classic v${SCRIPT_VERSION}"
+info "This may take several minutes. Please keep this window open."
+warn "Classic requires Python 2 and buster. For fewer dependencies, see version 3."
+
+if [ -d "$GHOST_INSTALL" ] && ! ghost_current_ready; then
+	die "A partial install was found at ${GHOST_INSTALL}. Remove that folder or fix the install, then try again."
+fi
 
 local_setup() {
-	if [ -d "$GHOST_PATH" ]; then
-		echo '[INFO] Ghost already installed at' "$GHOST_PATH"
-	else
-		echo '[INFO] Installing Ghost-CLI...'
-		mkdir -p "$GHOST_PATH"
-		cd "$GHOST_PATH"
-	
-		# Installing Ghost CLI
-		npm i -g ghost-cli@latest
-
-		# Installing local version of Ghost
-		echo '[INFO] Trying to install Ghost using Ghost-CLI...'
-		echo '[INFO] Installing Ghost at' "$GHOST_PATH"
-		ghost install local --no-start --enable --port 2373
+	if ghost_current_ready; then
+		info "Your blog folder already exists at ${GHOST_INSTALL}"
+		return 0
 	fi
-}
 
-move_includes() {
-	$(cp "$ABSOLUTE_PATH"/includes/deploy.sh "$GHOST_PATH/")
-	$(cp "$ABSOLUTE_PATH"/includes/uninstall.sh "$GHOST_PATH/")
-	$(cp "$ABSOLUTE_PATH"/includes/index.html "$GHOST_PATH""/current/")
-	$(cp "$ABSOLUTE_PATH"/includes/gitignore.base "$GHOST_PATH""/current/")
-	$(cp "$ABSOLUTE_PATH"/includes/gitignore.base "$GHOST_PATH""/current/.gitignore")
-	$(chmod +x "$GHOST_PATH""/deploy.sh")
-	$(chmod +x "$GHOST_PATH""/uninstall.sh")
+	info "Creating your blog folder at ${GHOST_INSTALL}..."
+	mkdir -p "$GHOST_INSTALL"
+	cd "$GHOST_INSTALL" || die "Could not create your blog folder."
+
+	info "Installing Ghost (the blogging software)..."
+	npm install -g ghost-cli@latest
+
+	info "Setting up Ghost on your computer..."
+	if ! ghost install local --no-start --enable --port "$GHOST_PORT"; then
+		die "Ghost could not be installed. See docs/legacy/TROUBLESHOOTING.md"
+	fi
+
+	if ! ghost_current_ready; then
+		die "Ghost install did not finish correctly. See docs/legacy/TROUBLESHOOTING.md"
+	fi
 }
 
 local_deps() {
-	echo '[INFO] Installing needed dependencies...'
+	info "Installing buster (static site generator for Classic)..."
 
-	cd "$GHOST_PATH"
-	success=0
-	check_pip=$(which pip)
-	check_pip2=$(which pip2)
-	check_pip27=$(which pip2.7)
+	local success=0
 
-	if [ "$check_pip" ]; then
-		pip install buster
-		success=`expr $success + 1`
-	else
-		echo "[INFO] Command 'pip' was not found on path..."
+	if command -v pip2.7 >/dev/null 2>&1; then
+		pip2.7 install buster && success=1
+	elif command -v pip2 >/dev/null 2>&1; then
+		pip2 install buster && success=1
 	fi
 
-	if [ "$check_pip2" ]; then
-		pip2 install buster
-		success=`expr $success + 1`
-	else
-		echo "[INFO] Command 'pip2' was not found on path..."	
-	fi
-
-	if [ "$check_pip27" ]; then
-		pip2.7 install buster
-		success=`expr $success + 1`
-	else
-		echo "[INFO] Command 'pip2.7' was not found on path..."	
-	fi
-
-	# Checking if pip was found and 'buster' was successfully installed.
-	if [ "$success" -eq "0" ]; then
-		echo "[WARN] Command pip cannot be found on your system."
-		echo "[WARN] Trying to install pip for Python 2..."
-
-		# Trying to install pip for different OSs (MacOS and Linux)
-		if [ "$(uname)" == "Darwin" ]; then
-			echo '[INFO] Mac OS detected.'
-			sudo easy_install pip
-			sudo pip install --upgrade virtualenv
-			sudo pip install buster
-		elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-			echo '[INFO] Linux detected.'
-			sudo apt-get install python-setuptools python-dev build-essential 
-			sudo easy_install pip
-			sudo pip install --upgrade virtualenv
-			sudo pip install buster
+	if [ "$success" -eq 0 ]; then
+		warn "pip2 was not found. Trying to install Python 2 pip..."
+		if [ "$(uname)" = "Darwin" ]; then
+			sudo easy_install pip 2>/dev/null || true
+			sudo pip2 install buster 2>/dev/null || sudo pip install buster
+		elif [ "$(uname -s | cut -c1-5)" = "Linux" ]; then
+			sudo apt-get install -y python-setuptools python-dev build-essential 2>/dev/null || true
+			sudo easy_install pip 2>/dev/null || true
+			sudo pip2 install buster 2>/dev/null || sudo pip install buster
 		else
-			echo '[ERROR] Operating System not supported yet. Please, open a Github Issue at https://github.com/paladini/ghost-on-github-pages/issues telling about this problem.'
-			echo "[ERROR] Since 'pip' for Python 2 and 'buster' was not found and cannot be installed, I'm exiting this installation script now."
-			exit
+			die "Could not install buster. See docs/legacy/REQUIREMENTS.md (Python 2 + pip2 required)."
 		fi
 	fi
-	
-	echo '[INFO] Done! Dependencies appears to be okay.'
+
+	if ! command -v buster >/dev/null 2>&1; then
+		die "buster is still not available. Install Python 2 and pip2, then run install.sh again. See docs/legacy/REQUIREMENTS.md"
+	fi
+
+	info "buster is ready."
+}
+
+move_includes() {
+	if ! ghost_current_ready; then
+		die "Ghost is not ready yet. Install cannot continue."
+	fi
+
+	cp "${ABSOLUTE_PATH}/includes/deploy.sh" "${GHOST_INSTALL}/"
+	cp "${ABSOLUTE_PATH}/includes/uninstall.sh" "${GHOST_INSTALL}/"
+	cp "${ABSOLUTE_PATH}/includes/fix-links.sh" "${GHOST_INSTALL}/"
+	mkdir -p "${GHOST_INSTALL}/lib"
+	cp "${ABSOLUTE_PATH}/includes/lib/common.sh" "${GHOST_INSTALL}/lib/common.sh"
+	mkdir -p "${GHOST_INSTALL}/scripts"
+	cp "${ABSOLUTE_PATH}/scripts/validate-static.sh" "${GHOST_INSTALL}/scripts/"
+	chmod +x "${GHOST_INSTALL}/deploy.sh"
+	chmod +x "${GHOST_INSTALL}/uninstall.sh"
+	chmod +x "${GHOST_INSTALL}/fix-links.sh"
+	chmod +x "${GHOST_INSTALL}/scripts/validate-static.sh"
+	cp "${ABSOLUTE_PATH}/includes/index.html" "${GHOST_PATH}/"
+	cp "${ABSOLUTE_PATH}/includes/gitignore.base" "${GHOST_PATH}/"
+	cp "${ABSOLUTE_PATH}/includes/gitignore.base" "${GHOST_PATH}/.gitignore"
 }
 
 local_run() {
-	if [ -d "$GHOST_PATH" ]; then
-		echo '[INFO] Starting Ghost server...'
-		cd "$GHOST_PATH"
-		ghost start --enable
-	fi
+	cd "$GHOST_INSTALL" || die "Could not open your blog folder."
+	info "Starting your local blog..."
+	ghost start --enable || die "Could not start Ghost. Try: cd ~/.ghost && ghost start"
+	configure_ghost_url
 }
 
 local_setup
 local_deps
-local_run
 move_includes
-(cd "$GHOST_PATH" && ./deploy.sh)
+local_run
+
+info "Install finished!"
+info "Open your blog editor at: http://localhost:${GHOST_PORT}/ghost"
+info "Set your site URL to http://localhost:${GHOST_PORT} in Ghost Admin if publish ever hangs."
+info "When you are ready to go live, run: cd ~/.ghost && ./deploy.sh"
+
+if [ "$SKIP_DEPLOY" -eq 0 ]; then
+	echo ""
+	read -r -p "Publish your blog to GitHub Pages now? [y/N] " answer
+	case "$answer" in
+		[yY]|[yY][eE][sS])
+			(cd "$GHOST_INSTALL" && ./deploy.sh)
+			;;
+		*)
+			info "Skipped first publish. Run ./deploy.sh anytime from ~/.ghost"
+			;;
+	esac
+fi

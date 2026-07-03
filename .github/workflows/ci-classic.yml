@@ -1,0 +1,25 @@
+name: CI Classic
+
+on:
+  push:
+    branches: [classic/v2]
+  pull_request:
+    branches: [classic/v2]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ripgrep
+        run: sudo apt-get update && sudo apt-get install -y ripgrep
+
+      - name: Install shellcheck
+        run: sudo apt-get install -y shellcheck
+
+      - name: Run shellcheck
+        run: bash scripts/shellcheck.sh
+
+      - name: Run static validation fixture tests
+        run: bash tests/run-validation-tests.sh
