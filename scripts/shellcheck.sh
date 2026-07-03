@@ -9,7 +9,7 @@ if ! command -v shellcheck >/dev/null 2>&1; then
 	exit 0
 fi
 
-shellcheck \
+shellcheck -x \
 	"${ROOT}/install.sh" \
 	"${ROOT}/includes/deploy.sh" \
 	"${ROOT}/includes/uninstall.sh" \
