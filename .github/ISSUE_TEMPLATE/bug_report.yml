@@ -1,0 +1,67 @@
+name: Bug report
+description: Something is not working as expected
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a problem. The more detail you provide, the faster we can help.
+
+  - type: dropdown
+    id: version
+    attributes:
+      label: Which version are you using?
+      options:
+        - v3 (recommended)
+        - Classic v2
+        - Not sure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS
+        - Linux
+        - Windows
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: What were you trying to do?
+      description: List the steps you followed (for example, running install.sh or deploy.sh).
+      placeholder: |
+        1. Downloaded the latest release
+        2. Ran ./install.sh
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead?
+      description: Include the full error message if you have one. A screenshot helps.
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Links to your repo (if public), Ghost version, or other context.
+    validations:
+      required: false

@@ -3,6 +3,8 @@
 > **Classic line** uses **buster** and **Python 2** (branch [`classic/v2`](https://github.com/paladini/ghost-on-github-pages/tree/classic/v2)).  
 > **New blogs:** use [version 3](../v3/GETTING-STARTED.md) (no Python required).
 
+**Classic demo (archive):** [paladini.github.io/ghost-on-github-pages-demo/legacy/v2/static/](https://paladini.github.io/ghost-on-github-pages-demo/legacy/v2/static/) — preserved from 2018, including known localhost URL bugs for comparison with v3.
+
 ## Downloads
 
 | Release | When to use |

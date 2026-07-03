@@ -1,59 +1,41 @@
 # Ghost on GitHub Pages
 
-> ## Version 3.0 is here
-> v3 replaces Python and buster with a simpler Node-based tool (**gssg**).
-> Fewer things to install, more reliable publishing, and fixes for long-standing bugs.
->
-> - **Start a new blog (recommended):** [Getting started guide](docs/v3/GETTING-STARTED.md) · [Download v3.0.0](https://github.com/paladini/ghost-on-github-pages/releases/latest)
-> - **Already using the old version?** [Migration guide](docs/MIGRATION.md) · run `./migrate.sh`
-> - **Want the Classic version?** [Download v2.1.0 (latest Classic)](https://github.com/paladini/ghost-on-github-pages/releases/tag/v2.1.0) · [Frozen v2.0.1](https://github.com/paladini/ghost-on-github-pages/releases/tag/v2.0.1) · [Legacy docs](docs/legacy/README.md)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/3361224/39667855-7f37e624-5095-11e8-9297-6a2e63aaac4b.png" alt="Ghost on GitHub Pages" width="640">
+</p>
 
-![Ghost on GitHub Pages](https://user-images.githubusercontent.com/3361224/39667855-7f37e624-5095-11e8-9297-6a2e63aaac4b.png)
+<p align="center">
+  <strong>Write in Ghost. Publish a free blog on GitHub Pages.</strong><br>
+  No paid hosting. Set up in minutes.
+</p>
 
-**[Live demo](http://paladini.github.io/ghost-on-github-pages-demo/)** — the demo site will be re-published with v3 soon; use the [getting started guide](docs/v3/GETTING-STARTED.md) to try v3 on your own blog today.
+<p align="center">
+  <a href="https://github.com/paladini/ghost-on-github-pages/actions/workflows/ci.yml"><img src="https://github.com/paladini/ghost-on-github-pages/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+  <a href="https://github.com/paladini/ghost-on-github-pages/releases/latest"><img src="https://img.shields.io/github/v/release/paladini/ghost-on-github-pages?label=release" alt="Latest release"></a>
+  <a href="https://github.com/paladini/ghost-on-github-pages/blob/master/LICENSE"><img src="https://img.shields.io/github/license/paladini/ghost-on-github-pages" alt="MIT License"></a>
+  <a href="https://github.com/paladini/ghost-on-github-pages/stargazers"><img src="https://img.shields.io/github/stars/paladini/ghost-on-github-pages?style=social" alt="GitHub stars"></a>
+</p>
+
+<p align="center">
+  <a href="docs/v3/GETTING-STARTED.md"><strong>Get started</strong></a> ·
+  <a href="https://paladini.github.io/ghost-on-github-pages-demo/"><strong>v3 demo</strong></a> ·
+  <a href="docs/MIGRATION.md">Upgrading from Classic?</a>
+</p>
 
 [Ghost](https://ghost.org/) is a modern publishing platform. This project helps you run Ghost on your computer and publish a **free static blog** on [GitHub Pages](https://pages.github.com/) — no paid hosting required.
 
-## Which version should I use?
+**Live demos:** [v3 (current)](https://paladini.github.io/ghost-on-github-pages-demo/) · [Classic v2 (archive)](https://paladini.github.io/ghost-on-github-pages-demo/legacy/v2/static/) — see the [demo repository](https://github.com/paladini/ghost-on-github-pages-demo) for details.
 
-| | **v3.0 (New — recommended)** | **v2.x (Classic — maintenance)** |
-|---|---|---|
-| Static site tool | gssg (installed via Node) | buster (Python 2) |
-| What you need to install | Node + wget + Ghost | Node + Python 2 + pip2 + buster + Ghost |
-| Support | Active (new features) | Maintenance on branch `classic/v2` |
-| Open issues fixed | Yes — see [CHANGELOG](CHANGELOG.md) | Most fixes in [v2.1.0](https://github.com/paladini/ghost-on-github-pages/releases/tag/v2.1.0) |
-| Download | [Latest release](https://github.com/paladini/ghost-on-github-pages/releases/latest) | [v2.1.0](https://github.com/paladini/ghost-on-github-pages/releases/tag/v2.1.0) · [v2.0.1 frozen](https://github.com/paladini/ghost-on-github-pages/releases/tag/v2.0.1) · [legacy/v2.0.1 alias](https://github.com/paladini/ghost-on-github-pages/releases/tag/legacy/v2.0.1) |
-| Documentation | [docs/v3/](docs/v3/) | [docs/legacy/](docs/legacy/) · [classic/v2 branch](https://github.com/paladini/ghost-on-github-pages/tree/classic/v2) |
+## What's new in version 3
 
-## Quick start (version 3)
+- **Simpler setup** — Node.js and wget only (no Python)
+- **Reliable publishing** — fixes broken images and localhost links ([#9](https://github.com/paladini/ghost-on-github-pages/issues/9)–[#22](https://github.com/paladini/ghost-on-github-pages/issues/22))
+- **Safe upgrade path** — `./migrate.sh` with automatic backup from Classic v2
+- **Plain-English guides** in the [`docs/`](docs/) folder
 
-1. Install [Node.js](https://nodejs.org/) and `wget` — see [Requirements](docs/v3/REQUIREMENTS.md)
-2. Create a public repository on GitHub
-3. Download and extract this project
-4. Run:
+**Full details:** [Release notes](RELEASE_NOTES_v3.0.0.md) · [Changelog](CHANGELOG.md)
 
-   ```
-   chmod +x install.sh
-   ./install.sh
-   ```
-
-5. Open `http://localhost:2373/ghost` and set up your blog
-6. Publish with `cd ~/.ghost && ./deploy.sh`
-
-Full walkthrough: **[Getting Started](docs/v3/GETTING-STARTED.md)**
-
-## Documentation
-
-| Guide | Description |
-|-------|-------------|
-| [docs/README.md](docs/README.md) | Documentation index |
-| [Getting Started](docs/v3/GETTING-STARTED.md) | New blog setup |
-| [Deploy](docs/v3/DEPLOY.md) | Publish changes |
-| [Migration](docs/MIGRATION.md) | Upgrade from Classic v2 |
-| [Troubleshooting](docs/TROUBLESHOOTING.md) | Common problems |
-| [Glossary](docs/GLOSSARY.md) | Terms explained simply |
-
-## How it works
+## How your blog gets online
 
 ```mermaid
 flowchart LR
@@ -62,17 +44,38 @@ flowchart LR
   github --> live["Live blog on\nGitHub Pages"]
 ```
 
-## Contributing
+## Start here
 
-Pull requests are welcome. Please run `bash scripts/shellcheck.sh` and `bash tests/run-validation-tests.sh` before submitting.
+| I want to… | Start here |
+|------------|------------|
+| Set up a **new** blog | [Getting Started](docs/v3/GETTING-STARTED.md) |
+| **Upgrade** from Classic v2 | [Migration guide](docs/MIGRATION.md) |
+| Fix a **problem** | [Troubleshooting](docs/TROUBLESHOOTING.md) |
+| Understand a **term** | [Glossary](docs/GLOSSARY.md) |
+
+## Documentation
+
+Step-by-step guides for install, publishing, migration, and more live in **[docs/README.md](docs/README.md)**.
+
+## Community
+
+Questions and ideas are welcome — [open an issue](https://github.com/paladini/ghost-on-github-pages/issues/new).
+
+Want to help? You do not need to be a developer. See **[CONTRIBUTING.md](CONTRIBUTING.md)** for ways to contribute (docs, bug reports, testing, and code).
 
 ## About
 
-Created to make Ghost blogs accessible on free GitHub Pages hosting. Major releases:
-
-- **v3.0.0** (2026) — gssg, no Python, migration tool, expanded docs
-- **v2.0.1** (2018) — Classic release with buster
-
-Questions? [Open an issue](https://github.com/paladini/ghost-on-github-pages/issues/new).
+Created to make Ghost blogs accessible on free GitHub Pages hosting. Licensed under [MIT](LICENSE).
 
 **Reference:** [Free Ghost hosting on GitHub Pages](http://ledtechnica.com/free-ghost-hosting-on-github-pages/)
+
+<details>
+<summary><strong>Using Classic v2 (buster / Python 2)?</strong></summary>
+
+Classic is in maintenance on branch [`classic/v2`](https://github.com/paladini/ghost-on-github-pages/tree/classic/v2).
+
+- Download [v2.1.0 (latest Classic)](https://github.com/paladini/ghost-on-github-pages/releases/tag/v2.1.0)
+- [Legacy documentation](docs/legacy/README.md)
+- [Classic v2 live demo (archive)](https://paladini.github.io/ghost-on-github-pages-demo/legacy/v2/static/)
+
+</details>

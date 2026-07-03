@@ -9,7 +9,8 @@ if ! command -v shellcheck >/dev/null 2>&1; then
 	exit 0
 fi
 
-shellcheck -x \
+# common.sh is listed explicitly; -e SC1091 avoids false positives on source= directives.
+shellcheck -x -P "${ROOT}" -P "${ROOT}/includes" -e SC1091 \
 	"${ROOT}/install.sh" \
 	"${ROOT}/migrate.sh" \
 	"${ROOT}/includes/deploy.sh" \

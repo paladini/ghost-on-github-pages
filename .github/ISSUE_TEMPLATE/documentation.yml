@@ -1,0 +1,42 @@
+name: Documentation improvement
+description: Suggest a fix or improvement to the guides
+title: "[Docs]: "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help us make the guides clearer for everyone — especially people new to Ghost and GitHub Pages.
+
+  - type: textarea
+    id: page
+    attributes:
+      label: Which page or section?
+      description: Link or file path (for example, docs/v3/GETTING-STARTED.md).
+      placeholder: docs/v3/GETTING-STARTED.md — Step 2
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is confusing or missing?
+      description: Describe the problem in plain language.
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested improvement
+      description: How would you reword it, or what should be added?
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: willing
+    attributes:
+      label: Contribution
+      options:
+        - label: I am willing to submit a pull request for this change
+          required: false

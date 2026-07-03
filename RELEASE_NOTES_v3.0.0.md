@@ -19,4 +19,4 @@ This is a major update after several years. Version 3 replaces the old Python to
 
 Broken images, localhost links, install errors, and other long-standing bugs — see [CHANGELOG.md](https://github.com/paladini/ghost-on-github-pages/blob/master/CHANGELOG.md).
 
-**Demo:** http://paladini.github.io/ghost-on-github-pages-demo/
+**Demos:** [v3 (current)](https://paladini.github.io/ghost-on-github-pages-demo/) · [Classic v2 (archive)](https://paladini.github.io/ghost-on-github-pages-demo/legacy/v2/static/)

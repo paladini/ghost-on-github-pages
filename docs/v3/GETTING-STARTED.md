@@ -2,7 +2,7 @@
 
 Set up a free Ghost blog on GitHub Pages in a few steps.
 
-**Live demo:** [paladini.github.io/ghost-on-github-pages-demo](http://paladini.github.io/ghost-on-github-pages-demo/)
+**Live demos:** [v3 (current)](https://paladini.github.io/ghost-on-github-pages-demo/) · [Classic v2 (archive)](https://paladini.github.io/ghost-on-github-pages-demo/legacy/v2/static/)
 
 ## What you'll need
 
