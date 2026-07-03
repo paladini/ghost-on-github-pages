@@ -194,3 +194,7 @@ GitHub.sublime-settings
 
 
 # End of https://www.gitignore.io/api/node,python,sublimetext
+
+# Track shell helpers (overrides Python lib/ ignore above)
+!includes/lib/
+!includes/lib/**
