@@ -10,7 +10,7 @@
 
 ![Ghost on GitHub Pages](https://user-images.githubusercontent.com/3361224/39667855-7f37e624-5095-11e8-9297-6a2e63aaac4b.png)
 
-**[Live demo](http://paladini.github.io/ghost-on-github-pages-demo/)**
+**[Live demo](http://paladini.github.io/ghost-on-github-pages-demo/)** — the demo site will be re-published with v3 soon; use the [getting started guide](docs/v3/GETTING-STARTED.md) to try v3 on your own blog today.
 
 [Ghost](https://ghost.org/) is a modern publishing platform. This project helps you run Ghost on your computer and publish a **free static blog** on [GitHub Pages](https://pages.github.com/) — no paid hosting required.
 
