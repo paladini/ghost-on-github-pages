@@ -43,10 +43,12 @@ CI runs the same checks on every pull request. Run them before submitting:
 ```bash
 bash scripts/shellcheck.sh
 bash tests/run-validation-tests.sh
+bash tests/run-compose-tests.sh
 ```
 
 - **shellcheck** — catches common mistakes in shell scripts (`install.sh`, `deploy.sh`, `migrate.sh`, and related files).
 - **Validation tests** — verify that published HTML does not contain broken `localhost` links or image paths. These tests protect users from bugs that only show up after publishing.
+- **Compose tests** — check `compose.yaml` and the publish GitHub Action against the documented Ghost 6 / `~/.ghost` layout. If Docker is installed, also run `bash scripts/compose-smoke.sh` (add `--start` to boot the image).
 
 If you do not have `shellcheck` installed, the script skips that step with a warning. On Ubuntu/Debian: `sudo apt-get install shellcheck`.
 
@@ -54,6 +56,7 @@ If you do not have `shellcheck` installed, the script skips that step with a war
 
 - [ ] `bash scripts/shellcheck.sh` passes (or only warns that shellcheck is missing)
 - [ ] `bash tests/run-validation-tests.sh` passes
+- [ ] `bash tests/run-compose-tests.sh` passes
 - [ ] Documentation updated if behavior or user-facing steps changed
 - [ ] Commit message explains **why** the change helps users
 
@@ -61,11 +64,14 @@ If you do not have `shellcheck` installed, the script skips that step with a war
 
 | Area | Purpose |
 |------|---------|
-| `install.sh` | First-time setup |
+| `install.sh` | First-time setup (Ghost-CLI) |
+| `compose.yaml` / `scripts/compose-setup.sh` | Optional Docker Compose setup |
 | `migrate.sh` | Upgrade from Classic v2 to v3 |
 | `includes/deploy.sh` | Publish blog to GitHub Pages |
 | `includes/lib/common.sh` | Shared helpers |
 | `scripts/validate-static.sh` | Pre-publish HTML checks |
+| `scripts/export-static.sh` | Static export without `git push` (host or CI) |
+| `.github/workflows/publish-static.yml` | Reusable Pages publish Action |
 | `docs/` | User-facing guides |
 
 ## Questions?

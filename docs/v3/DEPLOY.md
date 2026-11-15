@@ -6,10 +6,20 @@ After you edit your blog locally, use `deploy.sh` to send updates to GitHub Page
 
 1. Make sure Ghost is running:
 
+   **Ghost-CLI (`install.sh`):**
+
    ```
    cd ~/.ghost
    ghost start
    ```
+
+   **Docker Compose:**
+
+   ```
+   docker compose up -d
+   ```
+
+   (from this project folder or from `~/.ghost` — see [DOCKER.md](DOCKER.md))
 
 2. Edit your blog at **http://localhost:2373/ghost**
 
@@ -47,9 +57,13 @@ See [TROUBLESHOOTING.md](../TROUBLESHOOTING.md).
 
 Common fixes:
 
-- Run `ghost start` before `deploy.sh`
+- Run `ghost start` (Ghost-CLI) or `docker compose up -d` (Compose) before `deploy.sh`
 - Check your internet connection
 - Confirm your GitHub repository still exists and is public
+
+## Publish from GitHub Actions
+
+To generate static files in CI and deploy with GitHub Pages actions, see [CI.md](CI.md). You can still use `deploy.sh` to push to the Pages repository you already use.
 
 ## Multiple repositories
 

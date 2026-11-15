@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here.
 
+## Unreleased
+
+### Added
+
+- **Docker Compose** alternative to `install.sh` using the official `ghost:6` image and a bind mount at `~/.ghost/content` ([#28](https://github.com/paladini/ghost-on-github-pages/issues/28))
+- `scripts/compose-setup.sh`, `scripts/export-static.sh`, and `scripts/compose-smoke.sh`
+- Reusable GitHub Action to generate static files in CI and publish to GitHub Pages
+- Guides: [docs/v3/DOCKER.md](docs/v3/DOCKER.md), [docs/v3/CI.md](docs/v3/CI.md)
+
 ## [3.0.0] - 2026-07-03
 
 ### Added

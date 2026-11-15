@@ -21,6 +21,8 @@ Pick the guide that matches your situation.
 - [What to install first](v3/REQUIREMENTS.md)
 - [Getting started — new blog](v3/GETTING-STARTED.md)
 - [How to publish changes](v3/DEPLOY.md)
+- [Run Ghost with Docker Compose](v3/DOCKER.md)
+- [Publish from GitHub Actions](v3/CI.md)
 - [Multiple GitHub repositories (optional)](v3/MULTI-REPO.md)
 
 ## Classic version 2.x (maintenance)

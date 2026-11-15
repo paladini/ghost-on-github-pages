@@ -1,0 +1,26 @@
+# Copy this file to YOUR BLOG REPOSITORY as .github/workflows/publish-static.yml
+# Put a Ghost content snapshot in content/ (themes, images, data/) — do not commit secrets.
+# Enable GitHub Pages: Settings → Pages → Source: GitHub Actions
+# See docs/v3/CI.md
+
+name: Publish static site
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  publish:
+    uses: paladini/ghost-on-github-pages/.github/workflows/publish-static.yml@master
+    with:
+      production_domain: https://YOUR_USERNAME.github.io/YOUR_REPO
+      gh_username: YOUR_USERNAME
+      gh_repo: YOUR_REPO
+      content_path: content
+      deploy_pages: true

@@ -198,3 +198,6 @@ GitHub.sublime-settings
 # Track shell helpers (overrides Python lib/ ignore above)
 !includes/lib/
 !includes/lib/**
+
+# Local Compose scratch (CI smoke / docker volumes)
+.tmp-ghost-content/

@@ -1,0 +1,157 @@
+name: Publish static site
+
+# Reusable workflow: start Ghost (official image), run gssg, validate, optionally deploy Pages.
+# Call from your blog repo — see examples/github/publish-static.yml and docs/v3/CI.md
+# workflow_dispatch on this repository is a dry-run unless deploy_pages is true.
+
+on:
+  workflow_call:
+    inputs:
+      production_domain:
+        description: Public blog URL (https://USER.github.io/REPO)
+        required: true
+        type: string
+      gh_username:
+        description: GitHub username (used for gssg --subDir)
+        required: true
+        type: string
+      gh_repo:
+        description: Pages repository name
+        required: false
+        type: string
+        default: ""
+      ghost_port:
+        required: false
+        type: string
+        default: "2373"
+      content_path:
+        description: Directory in the caller repo to mount as Ghost content (themes, images, SQLite)
+        required: false
+        type: string
+        default: "content"
+      scripts_repository:
+        required: false
+        type: string
+        default: paladini/ghost-on-github-pages
+      scripts_ref:
+        required: false
+        type: string
+        default: master
+      deploy_pages:
+        required: false
+        type: boolean
+        default: true
+  workflow_dispatch:
+    inputs:
+      production_domain:
+        description: Public blog URL (https://USER.github.io/REPO)
+        required: true
+        type: string
+      gh_username:
+        description: GitHub username
+        required: true
+        type: string
+      gh_repo:
+        description: Pages repository name
+        required: false
+        type: string
+        default: ""
+      deploy_pages:
+        description: Deploy to GitHub Pages after export
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.repository }}
+  cancel-in-progress: true
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout caller repository
+        uses: actions/checkout@v4
+        with:
+          path: blog
+
+      - name: Checkout Ghost on GitHub Pages scripts
+        uses: actions/checkout@v4
+        with:
+          # Reusable calls default to this repo on master. workflow_dispatch uses the current commit.
+          repository: ${{ inputs.scripts_repository || (github.event_name == 'workflow_dispatch' && github.repository || 'paladini/ghost-on-github-pages') }}
+          ref: ${{ inputs.scripts_ref || (github.event_name == 'workflow_dispatch' && github.sha || 'master') }}
+          path: gogp
+
+      - name: Install wget and Node.js tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget
+          npm install -g ghost-static-site-generator
+
+      - name: Prepare Ghost content and blog folder
+        env:
+          CONTENT_PATH: ${{ inputs.content_path || 'content' }}
+        run: |
+          set -euo pipefail
+          WORKSPACE="${GITHUB_WORKSPACE}"
+          export GHOST_INSTALL="${WORKSPACE}/.gogp-home"
+          mkdir -p "${GHOST_INSTALL}"
+          CONTENT_SRC="${WORKSPACE}/blog/${CONTENT_PATH}"
+          if [ -d "$CONTENT_SRC" ]; then
+            export GHOST_CONTENT="$CONTENT_SRC"
+          else
+            export GHOST_CONTENT="${GHOST_INSTALL}/content"
+            mkdir -p "$GHOST_CONTENT"
+            echo "No ${CONTENT_PATH}/ in the repository; using an empty Ghost content directory."
+          fi
+          echo "GHOST_INSTALL=$GHOST_INSTALL" >> "$GITHUB_ENV"
+          echo "GHOST_CONTENT=$GHOST_CONTENT" >> "$GITHUB_ENV"
+          bash "${WORKSPACE}/gogp/scripts/compose-setup.sh"
+
+      - name: Start Ghost
+        env:
+          GHOST_PORT: ${{ inputs.ghost_port || '2373' }}
+          GHOST_URL: http://localhost:${{ inputs.ghost_port || '2373' }}
+        run: |
+          set -euo pipefail
+          docker compose -f "${GITHUB_WORKSPACE}/gogp/compose.yaml" up -d
+          bash -c 'set -euo pipefail; source "${GITHUB_WORKSPACE}/gogp/includes/lib/common.sh"; wait_for_ghost_http 45'
+
+      - name: Export static site
+        env:
+          GHOST_PORT: ${{ inputs.ghost_port || '2373' }}
+          GH_USERNAME: ${{ inputs.gh_username }}
+          GH_REPO: ${{ inputs.gh_repo }}
+          PRODUCTION_DOMAIN: ${{ inputs.production_domain }}
+        run: |
+          set -euo pipefail
+          export GHOST_SERVER_URL="http://localhost:${GHOST_PORT}"
+          bash "${GITHUB_WORKSPACE}/gogp/scripts/export-static.sh"
+
+      - name: Stop Ghost
+        if: always()
+        run: docker compose -f "${GITHUB_WORKSPACE}/gogp/compose.yaml" down --remove-orphans || true
+
+      - name: Upload GitHub Pages artifact
+        if: ${{ inputs.deploy_pages == true || inputs.deploy_pages == 'true' }}
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ github.workspace }}/.gogp-home/publish
+
+  deploy:
+    if: ${{ inputs.deploy_pages == true || inputs.deploy_pages == 'true' }}
+    needs: export
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

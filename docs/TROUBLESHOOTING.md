@@ -20,6 +20,22 @@ Answers in plain English. If you are stuck, [open an issue](https://github.com/p
 2. Make sure you have an internet connection.
 3. On Linux, you may need `curl` and build tools for Ghost — see Ghost's official docs.
 
+## Docker Compose
+
+### `docker compose` is not found
+
+Install Docker Desktop (Windows/macOS) or Docker Engine + the Compose plugin (Linux). In WSL, enable the Docker Desktop WSL integration. See [DOCKER.md](v3/DOCKER.md).
+
+### Ghost never opens at http://localhost:2373
+
+1. Run `docker compose ps` and `docker compose logs ghost`.
+2. Confirm nothing else is using port **2373**.
+3. If you set `GHOST_PORT`, also set `GHOST_URL` to `http://localhost:THAT_PORT`.
+
+### `deploy.sh` says the blog folder is not set up
+
+Run `./scripts/compose-setup.sh` from this project first so `~/.ghost/.docker` and `deploy.sh` exist. Do not mix a Ghost-CLI install and Compose in the same `~/.ghost` folder.
+
 ## Publish problems
 
 ### "Static files were not created"
@@ -34,6 +50,8 @@ Answers in plain English. If you are stuck, [open an issue](https://github.com/p
    cd ~/.ghost
    ghost start
    ```
+
+   Or, with Docker: `docker compose up -d` (see [DOCKER.md](v3/DOCKER.md)).
 
 2. Open `http://localhost:2373` in your browser and confirm the blog loads.
 3. Run `./deploy.sh` again.

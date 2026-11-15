@@ -6,13 +6,15 @@ Install these **before** running `install.sh`.
 
 | Item | Why |
 |------|-----|
-| A computer with macOS or Linux | Windows users can try [WSL](https://learn.microsoft.com/en-us/windows/wsl/) |
+| A computer with macOS or Linux | Windows users can try [WSL](https://learn.microsoft.com/en-us/windows/wsl/). On WSL, [Docker Compose](DOCKER.md) is often easier than `install.sh`. |
 | [Node.js](https://nodejs.org/) LTS (v18 or v20) | Runs Ghost |
 | `wget` | Used when creating your static site |
 | A free [GitHub](https://github.com) account | Hosts your blog for free |
 | Internet connection | Downloads Ghost and publishing tools |
 
 You do **not** need Python for version 3.
+
+To run Ghost in Docker instead of Ghost-CLI, you also need Docker Compose v2 — see [DOCKER.md](DOCKER.md).
 
 ## Step 1 — Install Node.js
 
@@ -69,7 +71,7 @@ Example URL: `git@github.com:yourname/my-blog.git`
 
 ## Optional — Ghost version note
 
-Version 3 uses Ghost installed via Ghost-CLI. If you hit compatibility issues, see [TROUBLESHOOTING.md](../TROUBLESHOOTING.md) or open an issue.
+Version 3 uses Ghost installed via Ghost-CLI (`ghost-cli@latest`, currently Ghost 6) or the official Docker image `ghost:6`. If you hit compatibility issues, see [TROUBLESHOOTING.md](../TROUBLESHOOTING.md) or open an issue.
 
 ## Next step
 
