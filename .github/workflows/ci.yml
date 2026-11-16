@@ -23,3 +23,19 @@ jobs:
 
       - name: Run static validation fixture tests
         run: bash tests/run-validation-tests.sh
+
+      - name: Run compose and workflow fixture tests
+        run: bash tests/run-compose-tests.sh
+
+      - name: Lint GitHub Actions workflows
+        run: |
+          bash <(curl --fail --silent --show-error --location https://raw.githubusercontent.com/rhysd/actionlint/914e7df21a07ef503a81201c76d2b11c789d3fca/scripts/download-actionlint.bash) 1.7.12
+          ./actionlint -oneline
+
+  compose-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate compose.yaml and boot Ghost
+        run: bash scripts/compose-smoke.sh --start

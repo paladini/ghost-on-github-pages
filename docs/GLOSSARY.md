@@ -26,4 +26,8 @@ Short definitions for words used in this project.
 
 **wget** — A small program used behind the scenes to copy web pages when building your static site. The install guide helps you install it if needed.
 
-**Node.js (Node)** — Software Ghost needs to run. You install it once before using this project.
+**Node.js (Node)** — Software Ghost needs to run (and that `gssg` uses when publishing). You install it once before using this project, even if Ghost itself runs in Docker.
+
+**Docker Compose** — A way to run Ghost in a container using the official `ghost:6` image, with your files in `~/.ghost/content`. See [v3/DOCKER.md](v3/DOCKER.md).
+
+**GitHub Action** — A script GitHub runs for you. This project can generate the static blog in CI and publish it to GitHub Pages. See [v3/CI.md](v3/CI.md).

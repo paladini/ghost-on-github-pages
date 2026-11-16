@@ -35,6 +35,8 @@
 
 **Full details:** [Release notes](RELEASE_NOTES_v3.0.0.md) · [Changelog](CHANGELOG.md)
 
+**3.1.0** adds Docker Compose and a GitHub Action for static publish. See the [3.1.0 changelog](CHANGELOG.md#310---2026-11-16).
+
 ## How your blog gets online
 
 ```mermaid
@@ -49,6 +51,8 @@ flowchart LR
 | I want to… | Start here |
 |------------|------------|
 | Set up a **new** blog | [Getting Started](docs/v3/GETTING-STARTED.md) |
+| Run Ghost with **Docker** (Windows/WSL) | [Docker Compose](docs/v3/DOCKER.md) |
+| Publish from **GitHub Actions** | [CI / Pages](docs/v3/CI.md) |
 | **Upgrade** from Classic v2 | [Migration guide](docs/MIGRATION.md) |
 | Fix a **problem** | [Troubleshooting](docs/TROUBLESHOOTING.md) |
 | Understand a **term** | [Glossary](docs/GLOSSARY.md) |

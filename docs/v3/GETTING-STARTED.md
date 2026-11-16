@@ -8,6 +8,8 @@ Set up a free Ghost blog on GitHub Pages in a few steps.
 
 Complete [REQUIREMENTS.md](REQUIREMENTS.md) first (Node.js, wget, GitHub account).
 
+Prefer Docker instead of installing Ghost with Node on your computer? Follow [DOCKER.md](DOCKER.md) (recommended on Windows/WSL), then continue from **Step 3** below.
+
 ## Step 1 — Download version 3
 
 1. Download the latest release: [github.com/paladini/ghost-on-github-pages/releases/latest](https://github.com/paladini/ghost-on-github-pages/releases/latest)

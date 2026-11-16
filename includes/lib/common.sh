@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 # Shared helpers for install, deploy, and migrate scripts.
 
-GHOST_INSTALL="${HOME}/.ghost"
-GHOST_PATH="${GHOST_INSTALL}/current"
+GHOST_INSTALL="${GHOST_INSTALL:-${HOME}/.ghost}"
+GHOST_PATH="${GHOST_PATH:-${GHOST_INSTALL}/current}"
 GHOST_PORT="${GHOST_PORT:-2373}"
-GHOST_SERVER_URL="http://localhost:${GHOST_PORT}"
-PUBLISH_PATH="${GHOST_INSTALL}/publish"
-DEPLOY_CONF="${GHOST_INSTALL}/deploy.conf"
-SITES_CONF="${GHOST_INSTALL}/sites.conf"
-SCRIPT_VERSION="3.0.0"
+GHOST_SERVER_URL="${GHOST_SERVER_URL:-http://localhost:${GHOST_PORT}}"
+PUBLISH_PATH="${PUBLISH_PATH:-${GHOST_INSTALL}/publish}"
+DEPLOY_CONF="${DEPLOY_CONF:-${GHOST_INSTALL}/deploy.conf}"
+SITES_CONF="${SITES_CONF:-${GHOST_INSTALL}/sites.conf}"
+SCRIPT_VERSION="3.1.0"
 
 die() {
 	echo "[ERROR] $*" >&2
@@ -29,8 +29,38 @@ require_command() {
 	fi
 }
 
+ghost_is_docker() {
+	[ -f "${GHOST_INSTALL}/.docker" ]
+}
+
 ghost_current_ready() {
+	if ghost_is_docker; then
+		[ -d "${GHOST_INSTALL}/content" ] && [ -d "${GHOST_PATH}" ]
+		return
+	fi
 	[ -d "${GHOST_PATH}" ] && { [ -f "${GHOST_PATH}/config.development.json" ] || [ -L "${GHOST_PATH}" ]; }
+}
+
+ghost_http_up() {
+	local code
+	if command -v curl >/dev/null 2>&1; then
+		code="$(curl -s -o /dev/null --max-time 3 -w "%{http_code}" "${GHOST_SERVER_URL}" || true)"
+		[[ "$code" =~ ^[23][0-9][0-9]$ ]]
+		return
+	fi
+	wget -q --spider --timeout=3 "${GHOST_SERVER_URL}" 2>/dev/null
+}
+
+wait_for_ghost_http() {
+	local tries="${1:-30}"
+	local i
+	for ((i = 1; i <= tries; i++)); do
+		if ghost_http_up; then
+			return 0
+		fi
+		sleep 2
+	done
+	return 1
 }
 
 production_domain_for() {
@@ -65,11 +95,41 @@ run_gssg() {
 
 	info "Creating static files from your blog. This may take a minute..."
 
+	require_command wget
+	# gssg requests /404 and old Ghost asset paths with wget --content-on-error.
+	# wget 1.21 still exits 8 after saving an HTTP error page, and gssg then
+	# stops before rewriting localhost links. Exit 8 means the server answered
+	# with an error. Connection failures use a different status and still abort.
+	local wget_bin wrap
+	wget_bin="$(command -v wget)"
+	wrap="$(mktemp -d)"
+	cat > "${wrap}/wget" << EOF
+#!/bin/sh
+"${wget_bin}" "\$@"
+status=\$?
+if [ "\$status" -eq 8 ]; then
+	exit 0
+fi
+exit "\$status"
+EOF
+	chmod +x "${wrap}/wget"
+
+	local gssg_status=0
 	if [ -n "$subdir" ]; then
-		gssg --domain "$GHOST_SERVER_URL" --productionDomain "$production_domain" --dest "$dest" --subDir "$subdir" --fail-on-error
+		PATH="${wrap}:${PATH}" gssg --domain "$GHOST_SERVER_URL" --url "$production_domain" --dest "$dest" --subDir "$subdir" --fail-on-error || gssg_status=$?
 	else
-		gssg --domain "$GHOST_SERVER_URL" --productionDomain "$production_domain" --dest "$dest" --fail-on-error
+		PATH="${wrap}:${PATH}" gssg --domain "$GHOST_SERVER_URL" --url "$production_domain" --dest "$dest" --fail-on-error || gssg_status=$?
 	fi
+	rm -rf "$wrap"
+	if [ "$gssg_status" -ne 0 ]; then
+		exit "$gssg_status"
+	fi
+
+	# Ghost 6 also writes Markdown indexes. gssg rewrites html/xml/js only.
+	while IFS= read -r file; do
+		sed "s|${GHOST_SERVER_URL}|${production_domain}|g" "$file" > "${file}.rewritten"
+		mv "${file}.rewritten" "$file"
+	done < <(find "$dest" -type f -name '*.md')
 }
 
 prepare_publish_dir() {
@@ -177,7 +237,20 @@ ensure_gssg() {
 
 ensure_ghost_running() {
 	if ! ghost_current_ready; then
-		die "Your blog folder is not set up yet. Run install.sh first."
+		die "Your blog folder is not set up yet. Run install.sh or scripts/compose-setup.sh first."
+	fi
+
+	if ghost_is_docker; then
+		if ghost_http_up; then
+			return 0
+		fi
+		if [ -f "${GHOST_INSTALL}/compose.yaml" ] && command -v docker >/dev/null 2>&1; then
+			info "Starting your local blog with Docker Compose..."
+			(cd "$GHOST_INSTALL" && docker compose up -d) || die "Could not start Ghost. See docs/v3/DOCKER.md"
+			wait_for_ghost_http 40 || die "Ghost did not become ready at ${GHOST_SERVER_URL}. See docs/v3/DOCKER.md"
+			return 0
+		fi
+		die "Ghost is not running at ${GHOST_SERVER_URL}. Start it with: docker compose up -d (see docs/v3/DOCKER.md)"
 	fi
 
 	cd "$GHOST_INSTALL" || die "Could not open your blog folder at ${GHOST_INSTALL}"
@@ -188,6 +261,9 @@ ensure_ghost_running() {
 }
 
 configure_ghost_url() {
+	if ghost_is_docker; then
+		return 0
+	fi
 	if ghost_current_ready; then
 		cd "$GHOST_INSTALL" || return 0
 		ghost config url "$GHOST_SERVER_URL" >/dev/null 2>&1 || true

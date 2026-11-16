@@ -82,10 +82,13 @@ move_includes() {
 
 	cp "${ABSOLUTE_PATH}/includes/deploy.sh" "${GHOST_INSTALL}/"
 	cp "${ABSOLUTE_PATH}/includes/uninstall.sh" "${GHOST_INSTALL}/"
-	cp -R "${ABSOLUTE_PATH}/includes/lib" "${GHOST_INSTALL}/lib"
+	mkdir -p "${GHOST_INSTALL}/lib"
+	# Copy contents. `cp -R src dest` nests src inside dest when dest already exists.
+	cp -R "${ABSOLUTE_PATH}/includes/lib/." "${GHOST_INSTALL}/lib/"
 	mkdir -p "${GHOST_INSTALL}/scripts"
 	cp "${ABSOLUTE_PATH}/scripts/validate-static.sh" "${GHOST_INSTALL}/scripts/"
-	chmod +x "${GHOST_INSTALL}/scripts/validate-static.sh"
+	cp "${ABSOLUTE_PATH}/scripts/export-static.sh" "${GHOST_INSTALL}/scripts/"
+	chmod +x "${GHOST_INSTALL}/scripts/validate-static.sh" "${GHOST_INSTALL}/scripts/export-static.sh"
 	cp "${ABSOLUTE_PATH}/includes/index.html" "${GHOST_PATH}/"
 	cp "${ABSOLUTE_PATH}/includes/gitignore.base" "${GHOST_PATH}/"
 	cp "${ABSOLUTE_PATH}/includes/gitignore.base" "${GHOST_PATH}/.gitignore"

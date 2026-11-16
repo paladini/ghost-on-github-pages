@@ -1,0 +1,30 @@
+# Official Ghost image for local editing. Static export still uses gssg (host or CI).
+# See docs/v3/DOCKER.md
+
+# Fixed project name so `docker compose up/down` is the same stack from this
+# repository and from ~/.ghost.
+name: gogp
+
+services:
+  ghost:
+    image: ghost:6
+    ports:
+      - "${GHOST_PORT:-2373}:2368"
+    environment:
+      NODE_ENV: development
+      url: ${GHOST_URL:-http://localhost:2373}
+      database__client: sqlite3
+      database__connection__filename: /var/lib/ghost/content/data/ghost.db
+    volumes:
+      - ${GHOST_CONTENT:-${HOME}/.ghost/content}:/var/lib/ghost/content
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "node -e \"require('http').get('http://127.0.0.1:2368', r => process.exit(r.statusCode >= 200 && r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))\"",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+    restart: unless-stopped
