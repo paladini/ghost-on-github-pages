@@ -14,7 +14,7 @@ The reusable workflow [`.github/workflows/publish-static.yml`](../../.github/wor
 1. Checks out your blog repository.
 2. Starts the official **`ghost:6`** image with your `content/` folder mounted. If that folder is missing, the job fails unless `allow_empty` is true.
 3. Waits until Ghost answers on `localhost:2373`.
-4. Runs `gssg` with `--productionDomain` (and `--subDir` when the repo is not `USERNAME.github.io`).
+4. Runs `gssg` with `--url` (and `--subDir` when the repo is not `USERNAME.github.io`).
 5. Runs `scripts/validate-static.sh`.
 6. Uploads `publish/` and deploys with official GitHub Pages actions (`upload-pages-artifact` + `deploy-pages`).
 

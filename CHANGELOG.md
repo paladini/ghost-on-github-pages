@@ -4,6 +4,12 @@ All notable changes to this project are documented here.
 
 ## Unreleased
 
+### Fixed
+
+- Static publishing no longer stops when `wget` saves an HTTP error page (status 8), including Ghost's 404 page. That exit used to abort `gssg` before it rewrote localhost links.
+- `gssg` is now called with `--url`, the flag that rewrites localhost links. gssg 1.1.4 ignores `--productionDomain`.
+- Markdown indexes written by Ghost 6 get the same public URL rewrite, so validation no longer fails on those files.
+
 ### Added
 
 - **Docker Compose** alternative to `install.sh` using the official `ghost:6` image, SQLite at `~/.ghost/content/data/ghost.db`, and a bind mount at `~/.ghost/content` ([#28](https://github.com/paladini/ghost-on-github-pages/issues/28))

@@ -95,11 +95,41 @@ run_gssg() {
 
 	info "Creating static files from your blog. This may take a minute..."
 
+	require_command wget
+	# gssg requests /404 and old Ghost asset paths with wget --content-on-error.
+	# wget 1.21 still exits 8 after saving an HTTP error page, and gssg then
+	# stops before rewriting localhost links. Exit 8 means the server answered
+	# with an error. Connection failures use a different status and still abort.
+	local wget_bin wrap
+	wget_bin="$(command -v wget)"
+	wrap="$(mktemp -d)"
+	cat > "${wrap}/wget" << EOF
+#!/bin/sh
+"${wget_bin}" "\$@"
+status=\$?
+if [ "\$status" -eq 8 ]; then
+	exit 0
+fi
+exit "\$status"
+EOF
+	chmod +x "${wrap}/wget"
+
+	local gssg_status=0
 	if [ -n "$subdir" ]; then
-		gssg --domain "$GHOST_SERVER_URL" --productionDomain "$production_domain" --dest "$dest" --subDir "$subdir" --fail-on-error
+		PATH="${wrap}:${PATH}" gssg --domain "$GHOST_SERVER_URL" --url "$production_domain" --dest "$dest" --subDir "$subdir" --fail-on-error || gssg_status=$?
 	else
-		gssg --domain "$GHOST_SERVER_URL" --productionDomain "$production_domain" --dest "$dest" --fail-on-error
+		PATH="${wrap}:${PATH}" gssg --domain "$GHOST_SERVER_URL" --url "$production_domain" --dest "$dest" --fail-on-error || gssg_status=$?
 	fi
+	rm -rf "$wrap"
+	if [ "$gssg_status" -ne 0 ]; then
+		exit "$gssg_status"
+	fi
+
+	# Ghost 6 also writes Markdown indexes. gssg rewrites html/xml/js only.
+	while IFS= read -r file; do
+		sed "s|${GHOST_SERVER_URL}|${production_domain}|g" "$file" > "${file}.rewritten"
+		mv "${file}.rewritten" "$file"
+	done < <(find "$dest" -type f -name '*.md')
 }
 
 prepare_publish_dir() {
