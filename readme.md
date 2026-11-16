@@ -6,7 +6,8 @@
 
 <p align="center">
   <strong>Write in Ghost. Publish a free blog on GitHub Pages.</strong><br>
-  No paid hosting. Set up in minutes.
+  No paid hosting. Set up in minutes.<br>
+  Created by <a href="https://github.com/paladini">Fernando Paladini</a> (<code>@paladini</code>).
 </p>
 
 <p align="center">
@@ -69,7 +70,7 @@ Want to help? You do not need to be a developer. See **[CONTRIBUTING.md](CONTRIB
 
 ## About
 
-Created to make Ghost blogs accessible on free GitHub Pages hosting. Licensed under [MIT](LICENSE).
+Created by [Fernando Paladini](https://github.com/paladini) (`@paladini`) to make Ghost blogs accessible on free GitHub Pages hosting. Licensed under [MIT](LICENSE).
 
 **Reference:** [Free Ghost hosting on GitHub Pages](http://ledtechnica.com/free-ghost-hosting-on-github-pages/)
 
