@@ -35,6 +35,8 @@
 
 **Full details:** [Release notes](RELEASE_NOTES_v3.0.0.md) · [Changelog](CHANGELOG.md)
 
+**3.1.0** adds Docker Compose and a GitHub Action for static publish. See the [3.1.0 changelog](CHANGELOG.md#310---2026-11-16).
+
 ## How your blog gets online
 
 ```mermaid
