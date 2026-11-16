@@ -58,7 +58,6 @@ require_text "$DOCKERFILE" '^FROM node:' "exporter image is a Node toolchain, no
 require_text "$DOCKERFILE" 'ghost-static-site-generator' "exporter image installs gssg"
 require_text "$IMAGE_WORKFLOW" 'ghcr.io/.*/ghost-on-github-pages' "GHCR image name"
 require_text "$IMAGE_WORKFLOW" ':exporter' "exporter tag"
-require_text "$IMAGE_WORKFLOW" 'visibility=public' "GHCR package is made public"
 if grep -Eq '^FROM[[:space:]]+ghost' "$DOCKERFILE"; then
 	fail "exporter image must not be based on the official Ghost image"
 else

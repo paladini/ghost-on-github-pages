@@ -135,7 +135,7 @@ docker run --rm --network host \
 
 Static files are written to `~/.ghost/publish/`. Docker Desktop on Windows does not share the Linux host network. Point the exporter at Ghost with `-e GHOST_SERVER_URL=http://host.docker.internal:2373` instead of `--network host`.
 
-The same tag is on Docker Hub as `paladini/ghost-on-github-pages:exporter`. GitHub Actions publishes `ghcr.io/paladini/ghost-on-github-pages:exporter` and marks that package public. It mirrors Docker Hub again when the repository secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` are set.
+Pull the public image from Docker Hub: `paladini/ghost-on-github-pages:exporter`. GitHub Actions also pushes `ghcr.io/paladini/ghost-on-github-pages:exporter`. A new GHCR package is private, and GitHub does not offer an API to change that. Set it to public once under the package settings: [ghost-on-github-pages package](https://github.com/users/paladini/packages/container/package/ghost-on-github-pages). Actions mirrors Docker Hub again when the repository secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` are set.
 
 ## If something goes wrong
 

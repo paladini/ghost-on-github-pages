@@ -79,18 +79,6 @@ jobs:
             ${{ steps.tags.outputs.ghcr }}:exporter
             ${{ steps.tags.outputs.ghcr }}:${{ steps.tags.outputs.sha }}
 
-      - name: Make the GHCR package public
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          # A new GHCR package is private. The image is only an exporter, so the
-          # package should be pullable without a token.
-          gh api --method PATCH \
-            -H "Accept: application/vnd.github+json" \
-            "/user/packages/container/${GITHUB_REPOSITORY#*/}" \
-            -f visibility=public
-
       - name: Push exporter mirror to Docker Hub
         if: steps.dockerhub.outputs.enabled == 'true'
         uses: docker/build-push-action@v6
