@@ -32,6 +32,14 @@ Install Docker Desktop (Windows/macOS) or Docker Engine + the Compose plugin (Li
 2. Confirm nothing else is using port **2373**.
 3. If you set `GHOST_PORT`, also set `GHOST_URL` to `http://localhost:THAT_PORT`.
 
+### Posts disappear after `docker compose down`
+
+The database must be `~/.ghost/content/data/ghost.db`. If that file is missing, the container was not using the Compose file from this project. Run `./scripts/compose-setup.sh` again and start Ghost with `docker compose up -d` so the project name is `gogp`.
+
+### `uninstall.sh` says the stack may still be running
+
+Docker could not stop the `gogp` project. Run `docker compose ps` in `~/.ghost` and then `docker compose down`. Your files are still in `~/.ghost` until you delete that folder yourself.
+
 ### `deploy.sh` says the blog folder is not set up
 
 Run `./scripts/compose-setup.sh` from this project first so `~/.ghost/.docker` and `deploy.sh` exist. Do not mix a Ghost-CLI install and Compose in the same `~/.ghost` folder.

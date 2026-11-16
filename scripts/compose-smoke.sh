@@ -52,4 +52,13 @@ if ! wait_for_ghost_http 45; then
 	exit 1
 fi
 
+DB_FILE="${GHOST_CONTENT}/data/ghost.db"
+if [ ! -f "$DB_FILE" ]; then
+	docker compose -f "$COMPOSE_FILE" logs ghost >&2 || true
+	echo "[ERROR] SQLite database was not written to ${DB_FILE}" >&2
+	echo "[ERROR] Posts would be lost when the container is removed." >&2
+	exit 1
+fi
+
 echo "[OK] Ghost responded at ${GHOST_SERVER_URL}"
+echo "[OK] SQLite database is at ${DB_FILE}"

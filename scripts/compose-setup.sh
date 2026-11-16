@@ -38,7 +38,9 @@ mkdir -p "${GHOST_INSTALL}/content" "${GHOST_PATH}" "${GHOST_INSTALL}/scripts"
 
 cp "${ROOT}/includes/deploy.sh" "${GHOST_INSTALL}/"
 cp "${ROOT}/includes/uninstall.sh" "${GHOST_INSTALL}/"
-cp -R "${ROOT}/includes/lib" "${GHOST_INSTALL}/lib"
+mkdir -p "${GHOST_INSTALL}/lib"
+# Copy contents. `cp -R src dest` nests src inside dest when dest already exists.
+cp -R "${ROOT}/includes/lib/." "${GHOST_INSTALL}/lib/"
 cp "${ROOT}/scripts/validate-static.sh" "${GHOST_INSTALL}/scripts/"
 cp "${ROOT}/scripts/export-static.sh" "${GHOST_INSTALL}/scripts/"
 cp "${ROOT}/compose.yaml" "${GHOST_INSTALL}/compose.yaml"

@@ -41,6 +41,11 @@ on:
         required: false
         type: boolean
         default: true
+      allow_empty:
+        description: Export even when the content directory is missing (publishes a fresh empty Ghost)
+        required: false
+        type: boolean
+        default: false
   workflow_dispatch:
     inputs:
       production_domain:
@@ -61,6 +66,11 @@ on:
         required: false
         type: boolean
         default: false
+      allow_empty:
+        description: Export even when the content directory is missing
+        required: false
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -69,7 +79,8 @@ permissions:
 
 concurrency:
   group: pages-${{ github.repository }}
-  cancel-in-progress: true
+  # Match the GitHub Pages starter: do not cancel an in-progress production deploy.
+  cancel-in-progress: false
 
 jobs:
   export:
@@ -97,6 +108,7 @@ jobs:
       - name: Prepare Ghost content and blog folder
         env:
           CONTENT_PATH: ${{ inputs.content_path || 'content' }}
+          ALLOW_EMPTY: ${{ inputs.allow_empty }}
         run: |
           set -euo pipefail
           WORKSPACE="${GITHUB_WORKSPACE}"
@@ -105,10 +117,14 @@ jobs:
           CONTENT_SRC="${WORKSPACE}/blog/${CONTENT_PATH}"
           if [ -d "$CONTENT_SRC" ]; then
             export GHOST_CONTENT="$CONTENT_SRC"
-          else
+          elif [ "${ALLOW_EMPTY}" = "true" ]; then
             export GHOST_CONTENT="${GHOST_INSTALL}/content"
             mkdir -p "$GHOST_CONTENT"
             echo "No ${CONTENT_PATH}/ in the repository; using an empty Ghost content directory."
+          else
+            echo "[ERROR] ${CONTENT_PATH}/ was not found in the repository." >&2
+            echo "[ERROR] Refusing to publish an empty Ghost site. Add a content snapshot or set allow_empty: true." >&2
+            exit 1
           fi
           echo "GHOST_INSTALL=$GHOST_INSTALL" >> "$GITHUB_ENV"
           echo "GHOST_CONTENT=$GHOST_CONTENT" >> "$GITHUB_ENV"
@@ -138,6 +154,10 @@ jobs:
         if: always()
         run: docker compose -f "${GITHUB_WORKSPACE}/gogp/compose.yaml" down --remove-orphans || true
 
+      - name: Setup GitHub Pages
+        if: ${{ inputs.deploy_pages == true || inputs.deploy_pages == 'true' }}
+        uses: actions/configure-pages@v5
+
       - name: Upload GitHub Pages artifact
         if: ${{ inputs.deploy_pages == true || inputs.deploy_pages == 'true' }}
         uses: actions/upload-pages-artifact@v3
@@ -154,4 +174,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

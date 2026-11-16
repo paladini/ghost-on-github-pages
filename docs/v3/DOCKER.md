@@ -41,7 +41,7 @@ This creates your **blog folder** at `~/.ghost`, including:
 
 | Path | Role |
 |------|------|
-| `~/.ghost/content/` | Themes, images, and the SQLite database (bind-mounted into the container) |
+| `~/.ghost/content/` | Themes, images, and the SQLite database (`content/data/ghost.db`) |
 | `~/.ghost/current/` | Where `gssg` writes `static/` (same as the Ghost-CLI layout) |
 | `~/.ghost/deploy.sh` | Same publish script as `install.sh` |
 | `~/.ghost/.docker` | Tells `deploy.sh` that Ghost runs in Docker |
@@ -63,6 +63,12 @@ Optional environment variables (see `.env.example`; do not commit a real `.env`)
 | `GHOST_CONTENT` | `$HOME/.ghost/content` | Bind mount for content |
 
 If you change `GHOST_PORT`, set `GHOST_URL` to match (for example `http://localhost:2373`).
+
+Compose uses the project name `gogp`. Starting or stopping from this folder and from `~/.ghost` controls the same stack.
+
+The database file is `~/.ghost/content/data/ghost.db`. Posts stay there when the container is removed. This SQLite setup does not run Ghost's MySQL job outbox; those jobs use Ghost's direct-dispatch path. Publishing with `gssg` does not need MySQL.
+
+Ghost may log a connection error while measuring an image, because inside the container it calls `http://localhost:2373` and the process itself listens on port 2368. The blog on your computer is still at that URL. `gssg` runs on the host and reads it from there.
 
 ## Step 3 — Open Ghost Admin
 

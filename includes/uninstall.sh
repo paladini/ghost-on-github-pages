@@ -19,8 +19,17 @@ uninstall() {
 	fi
 
 	if [ -f "${GHOST_INSTALL}/.docker" ]; then
-		if command -v docker >/dev/null 2>&1 && [ -f "${GHOST_INSTALL}/compose.yaml" ]; then
-			(cd "$GHOST_INSTALL" && docker compose down) || true
+		if ! command -v docker >/dev/null 2>&1; then
+			echo "[WARN] Docker is not available. The Compose stack may still be running." >&2
+			exit 1
+		fi
+		if [ ! -f "${GHOST_INSTALL}/compose.yaml" ]; then
+			echo "[WARN] ${GHOST_INSTALL}/compose.yaml is missing. The Compose stack may still be running." >&2
+			exit 1
+		fi
+		if ! (cd "$GHOST_INSTALL" && docker compose down); then
+			echo "[WARN] Could not stop the Docker Compose stack. It may still be running." >&2
+			exit 1
 		fi
 		echo "[INFO] Docker Compose Ghost was stopped. Your files are still in ${GHOST_INSTALL}."
 		echo "[INFO] Delete that folder yourself if you want a full cleanup (includes posts and images)."
