@@ -1,0 +1,90 @@
+name: Publish exporter image
+
+# Builds the gssg exporter and pushes the tag "exporter".
+# This is not the Ghost editing image. Compose keeps using the official ghost:6 image.
+# Docker Hub is a mirror when DOCKERHUB_USERNAME and DOCKERHUB_TOKEN are set.
+
+on:
+  push:
+    branches: [master]
+    tags: ["v*"]
+    paths:
+      - Dockerfile
+      - .dockerignore
+      - compose.yaml
+      - includes/**
+      - scripts/**
+      - .github/workflows/publish-image.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Detect Docker Hub credentials
+        id: dockerhub
+        env:
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        run: |
+          set -euo pipefail
+          if [ -n "${DOCKERHUB_TOKEN}" ] && [ -n "${DOCKERHUB_USERNAME}" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "Docker Hub secrets are unset. Publishing to GHCR only."
+          fi
+
+      - name: Login to Docker Hub
+        if: steps.dockerhub.outputs.enabled == 'true'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Image tags
+        id: tags
+        run: |
+          set -euo pipefail
+          owner="$(echo "${GITHUB_REPOSITORY_OWNER}" | tr '[:upper:]' '[:lower:]')"
+          sha_tag="exporter-${GITHUB_SHA}"
+          {
+            echo "ghcr=ghcr.io/${owner}/ghost-on-github-pages"
+            echo "sha=${sha_tag}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Push exporter to GHCR
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.tags.outputs.ghcr }}:exporter
+            ${{ steps.tags.outputs.ghcr }}:${{ steps.tags.outputs.sha }}
+
+      - name: Push exporter mirror to Docker Hub
+        if: steps.dockerhub.outputs.enabled == 'true'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/ghost-on-github-pages:exporter
+            ${{ secrets.DOCKERHUB_USERNAME }}/ghost-on-github-pages:${{ steps.tags.outputs.sha }}

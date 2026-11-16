@@ -66,3 +66,24 @@ cd ~/.ghost
 ```
 
 That pushes static files to the Pages repo you already use. The Action is optional.
+
+## Starter template
+
+The demo repository is the published site, not a blog you should copy. Use [paladini/ghost-on-github-pages-starter](https://github.com/paladini/ghost-on-github-pages-starter):
+
+1. Click **Use this template**.
+2. In the new repository, set **Settings → Pages → Source → GitHub Actions**.
+3. Replace `content/` with a copy of your Ghost content (`data/`, `images/`, `themes/`) before you care which posts go live. A folder that only has the template README can boot a fresh Ghost and publish its welcome page.
+4. Push to `main` or `master`.
+
+The workflow fills your username and repository name for a project site (`https://USER.github.io/REPO`). If the repository is named `USER.github.io`, edit `production_domain` to `https://USER.github.io` and set `gh_repo` to `USER.github.io`.
+
+## Marketplace action
+
+GitHub Marketplace lists actions that have `action.yml` in the repository root. A reusable workflow does not appear there. [action.yml](../../action.yml) is a composite action that runs the same export as the workflow above and uploads the Pages artifact.
+
+It cannot call the reusable workflow. GitHub does not allow that from a composite action, and `deploy-pages` has to run in a second job. The copy-paste example is [examples/github/marketplace-action.yml](../../examples/github/marketplace-action.yml).
+
+The reusable workflow in [examples/github/publish-static.yml](../../examples/github/publish-static.yml) is still the one-file path. Use that unless you specifically want the Marketplace action.
+
+After this repository is tagged, GitHub can list the action in the Marketplace from the release page ("Publish this Action to the GitHub Marketplace"). Until that box is checked, `uses: paladini/ghost-on-github-pages@master` still works.

@@ -11,6 +11,7 @@ Pick the guide that matches your situation.
 | Situation | Guide |
 |-----------|-------|
 | **I am setting up a new blog** | [v3 Getting Started](v3/GETTING-STARTED.md) |
+| **I want a blog repository ready for GitHub Actions** | [Starter template](https://github.com/paladini/ghost-on-github-pages-starter) |
 | **I already use the old (Classic) version** | [Migration guide](MIGRATION.md) |
 | **I want the Classic version on purpose** | [Legacy docs](legacy/README.md) |
 | **Something went wrong** | [Troubleshooting](TROUBLESHOOTING.md) |

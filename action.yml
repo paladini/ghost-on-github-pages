@@ -1,0 +1,112 @@
+name: Publish Ghost static site
+description: >-
+  Export a Ghost content folder to static files and upload a GitHub Pages
+  artifact. Editing still uses the official ghost image. Full deploy remains
+  a separate job, or use the reusable workflow.
+author: Fernando Paladini
+branding:
+  icon: book-open
+  color: gray-dark
+
+inputs:
+  production_domain:
+    description: Public blog URL (https://USER.github.io/REPO)
+    required: true
+  gh_username:
+    description: GitHub username (used for gssg --subDir)
+    required: true
+  gh_repo:
+    description: Pages repository name. Empty or USER.github.io means the site root.
+    required: false
+    default: ""
+  ghost_port:
+    description: Host port Ghost listens on inside the job
+    required: false
+    default: "2373"
+  content_path:
+    description: Directory in the caller repo to mount as Ghost content
+    required: false
+    default: content
+  deploy_pages:
+    description: >-
+      Upload a GitHub Pages artifact after export. Publishing still needs a
+      second job that runs actions/deploy-pages.
+    required: false
+    default: "true"
+  allow_empty:
+    description: Export even when the content directory is missing
+    required: false
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - name: Install wget and Node.js tools
+      shell: bash
+      run: |
+        set -euo pipefail
+        sudo apt-get update
+        sudo apt-get install -y wget
+        npm install -g ghost-static-site-generator
+
+    - name: Prepare Ghost content and blog folder
+      shell: bash
+      env:
+        CONTENT_PATH: ${{ inputs.content_path }}
+        ALLOW_EMPTY: ${{ inputs.allow_empty }}
+      run: |
+        set -euo pipefail
+        export GHOST_INSTALL="${GITHUB_WORKSPACE}/.gogp-home"
+        mkdir -p "${GHOST_INSTALL}"
+        CONTENT_SRC="${GITHUB_WORKSPACE}/${CONTENT_PATH}"
+        if [ -d "$CONTENT_SRC" ]; then
+          export GHOST_CONTENT="$CONTENT_SRC"
+        elif [ "${ALLOW_EMPTY}" = "true" ]; then
+          export GHOST_CONTENT="${GHOST_INSTALL}/content"
+          mkdir -p "$GHOST_CONTENT"
+          echo "No ${CONTENT_PATH}/ in the repository; using an empty Ghost content directory."
+        else
+          echo "[ERROR] ${CONTENT_PATH}/ was not found in the repository." >&2
+          echo "[ERROR] Refusing to publish an empty Ghost site. Add a content snapshot or set allow_empty: true." >&2
+          exit 1
+        fi
+        echo "GHOST_INSTALL=${GHOST_INSTALL}" >> "$GITHUB_ENV"
+        echo "GHOST_CONTENT=${GHOST_CONTENT}" >> "$GITHUB_ENV"
+        bash "${GITHUB_ACTION_PATH}/scripts/compose-setup.sh"
+
+    - name: Start Ghost
+      shell: bash
+      env:
+        GHOST_PORT: ${{ inputs.ghost_port }}
+        GHOST_URL: http://localhost:${{ inputs.ghost_port }}
+      run: |
+        set -euo pipefail
+        docker compose -f "${GITHUB_ACTION_PATH}/compose.yaml" up -d
+        bash -c 'set -euo pipefail; source "${GITHUB_ACTION_PATH}/includes/lib/common.sh"; wait_for_ghost_http 45'
+
+    - name: Export static site
+      shell: bash
+      env:
+        GHOST_PORT: ${{ inputs.ghost_port }}
+        GH_USERNAME: ${{ inputs.gh_username }}
+        GH_REPO: ${{ inputs.gh_repo }}
+        PRODUCTION_DOMAIN: ${{ inputs.production_domain }}
+      run: |
+        set -euo pipefail
+        export GHOST_SERVER_URL="http://localhost:${GHOST_PORT}"
+        bash "${GITHUB_ACTION_PATH}/scripts/export-static.sh"
+
+    - name: Stop Ghost
+      if: always()
+      shell: bash
+      run: docker compose -f "${GITHUB_ACTION_PATH}/compose.yaml" down --remove-orphans || true
+
+    - name: Setup GitHub Pages
+      if: inputs.deploy_pages == 'true'
+      uses: actions/configure-pages@v5
+
+    - name: Upload GitHub Pages artifact
+      if: inputs.deploy_pages == 'true'
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ${{ github.workspace }}/.gogp-home/publish

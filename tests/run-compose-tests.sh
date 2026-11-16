@@ -6,6 +6,10 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 COMPOSE="${ROOT}/compose.yaml"
 WORKFLOW="${ROOT}/.github/workflows/publish-static.yml"
 EXAMPLE="${ROOT}/examples/github/publish-static.yml"
+ACTION="${ROOT}/action.yml"
+DOCKERFILE="${ROOT}/Dockerfile"
+IMAGE_WORKFLOW="${ROOT}/.github/workflows/publish-image.yml"
+MARKETPLACE_EXAMPLE="${ROOT}/examples/github/marketplace-action.yml"
 FAILED=0
 
 fail() {
@@ -44,6 +48,21 @@ require_text "$WORKFLOW" 'actions/deploy-pages@v5' "Pages deploy"
 require_text "$WORKFLOW" 'ghost-static-site-generator' "gssg in CI"
 require_text "$WORKFLOW" 'Refusing to publish an empty Ghost site' "missing content fails the export"
 require_text "$EXAMPLE" 'uses:[[:space:]]*paladini/ghost-on-github-pages/.github/workflows/publish-static.yml@master' "example calls reusable workflow"
+require_text "$ACTION" 'using:[[:space:]]*composite' "Marketplace action is composite"
+require_text "$ACTION" 'scripts/export-static.sh' "Marketplace action exports with the shared script"
+require_text "$ACTION" 'Refusing to publish an empty Ghost site' "Marketplace action refuses a missing content folder"
+require_text "$ACTION" 'actions/upload-pages-artifact@v3' "Marketplace action uploads the Pages artifact"
+require_text "$MARKETPLACE_EXAMPLE" 'uses:[[:space:]]*paladini/ghost-on-github-pages@master' "Marketplace example calls the root action"
+require_text "$MARKETPLACE_EXAMPLE" 'actions/deploy-pages@v5' "Marketplace example deploys in a second job"
+require_text "$DOCKERFILE" '^FROM node:' "exporter image is a Node toolchain, not Ghost"
+require_text "$DOCKERFILE" 'ghost-static-site-generator' "exporter image installs gssg"
+require_text "$IMAGE_WORKFLOW" 'ghcr.io/.*/ghost-on-github-pages' "GHCR image name"
+require_text "$IMAGE_WORKFLOW" ':exporter' "exporter tag"
+if grep -Eq '^FROM[[:space:]]+ghost' "$DOCKERFILE"; then
+	fail "exporter image must not be based on the official Ghost image"
+else
+	echo "[OK] exporter image does not retag ghost"
+fi
 require_text "${ROOT}/.github/workflows/ci.yml" '914e7df21a07ef503a81201c76d2b11c789d3fca' "actionlint installer is pinned"
 require_text "${ROOT}/.github/workflows/ci.yml" '1\.7\.12' "actionlint version is pinned"
 require_text "${ROOT}/scripts/compose-setup.sh" 'includes/lib/\.' "compose setup replaces lib contents"

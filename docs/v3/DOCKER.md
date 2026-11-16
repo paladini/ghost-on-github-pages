@@ -112,6 +112,29 @@ Your posts stay in `~/.ghost/content`. To uninstall, run `~/.ghost/uninstall.sh`
 
 To generate and publish the static site in CI, see [CI.md](CI.md).
 
+## Export with the container image
+
+`compose.yaml` keeps using the official `ghost:6` image for editing. A second image only contains the export tools (Node.js, wget, and `gssg`):
+
+```
+ghcr.io/paladini/ghost-on-github-pages:exporter
+```
+
+Ghost must already be running. The exporter does not start it and it is not a copy of `ghost:6`. From WSL or Linux, with the blog folder at `~/.ghost`:
+
+```
+docker run --rm --network host \
+  -e GH_USERNAME=yourname \
+  -e GH_REPO=your-repo \
+  -e GHOST_INSTALL=/ghost \
+  -v "$HOME/.ghost:/ghost" \
+  ghcr.io/paladini/ghost-on-github-pages:exporter
+```
+
+Static files are written to `~/.ghost/publish/`. Docker Desktop on Windows does not share the Linux host network. Point the exporter at Ghost with `-e GHOST_SERVER_URL=http://host.docker.internal:2373` instead of `--network host`.
+
+The same tag is mirrored to Docker Hub (`YOUR_DOCKERHUB_USER/ghost-on-github-pages:exporter`) when the repository secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` are set. GHCR is the source of the image.
+
 ## If something goes wrong
 
 See [TROUBLESHOOTING.md](../TROUBLESHOOTING.md).

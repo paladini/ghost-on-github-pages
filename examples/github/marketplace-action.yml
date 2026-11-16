@@ -1,0 +1,41 @@
+# Copy this file to YOUR BLOG REPOSITORY as .github/workflows/publish-static.yml
+# when you want the Marketplace action instead of the reusable workflow.
+# The action exports the site and uploads a Pages artifact.
+# A second job deploys that artifact. See docs/v3/CI.md
+# The one-file path remains examples/github/publish-static.yml
+
+name: Publish static site
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: paladini/ghost-on-github-pages@master
+        with:
+          production_domain: https://YOUR_USERNAME.github.io/YOUR_REPO
+          gh_username: YOUR_USERNAME
+          gh_repo: YOUR_REPO
+          content_path: content
+          deploy_pages: true
+
+  deploy:
+    needs: export
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

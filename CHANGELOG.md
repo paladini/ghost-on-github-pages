@@ -15,6 +15,9 @@ All notable changes to this project are documented here.
 - **Docker Compose** alternative to `install.sh` using the official `ghost:6` image, SQLite at `~/.ghost/content/data/ghost.db`, and a bind mount at `~/.ghost/content` ([#28](https://github.com/paladini/ghost-on-github-pages/issues/28))
 - `scripts/compose-setup.sh`, `scripts/export-static.sh`, and `scripts/compose-smoke.sh`
 - Reusable GitHub Action to generate static files in CI and publish to GitHub Pages
+- Composite Action ([action.yml](action.yml)) for GitHub Marketplace search. It runs the same export and uploads a Pages artifact. The reusable workflow remains the one-file publish path.
+- Starter template: [paladini/ghost-on-github-pages-starter](https://github.com/paladini/ghost-on-github-pages-starter)
+- Exporter image `ghcr.io/paladini/ghost-on-github-pages:exporter` (Node, wget, and gssg). It does not replace `ghost:6`.
 - Guides: [docs/v3/DOCKER.md](docs/v3/DOCKER.md), [docs/v3/CI.md](docs/v3/CI.md)
 
 ## [3.0.0] - 2026-07-03

@@ -52,6 +52,7 @@ flowchart LR
 | I want to… | Start here |
 |------------|------------|
 | Set up a **new** blog | [Getting Started](docs/v3/GETTING-STARTED.md) |
+| Start from a **template** | [Starter repository](https://github.com/paladini/ghost-on-github-pages-starter) |
 | Run Ghost with **Docker** (Windows/WSL) | [Docker Compose](docs/v3/DOCKER.md) |
 | Publish from **GitHub Actions** | [CI / Pages](docs/v3/CI.md) |
 | **Upgrade** from Classic v2 | [Migration guide](docs/MIGRATION.md) |
@@ -64,7 +65,7 @@ Step-by-step guides for install, publishing, migration, and more live in **[docs
 
 ## Community
 
-Questions and ideas are welcome — [open an issue](https://github.com/paladini/ghost-on-github-pages/issues/new).
+Questions and ideas are welcome. [Open an issue](https://github.com/paladini/ghost-on-github-pages/issues/new) for a bug, or start a [discussion](https://github.com/paladini/ghost-on-github-pages/discussions) when you are choosing how to set the blog up.
 
 Want to help? You do not need to be a developer. See **[CONTRIBUTING.md](CONTRIBUTING.md)** for ways to contribute (docs, bug reports, testing, and code).
 
